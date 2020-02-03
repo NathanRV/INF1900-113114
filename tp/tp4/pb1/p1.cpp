@@ -2,39 +2,7 @@
     Date:       20-01-2020
     Authors:    David Saikali, 2015144
                 Nathan Ramsay-Vejlens 1989944
-    File name:  p2.cpp
-*/
-
-/*
-    IO description: 
-    The output LED is connected to PORTC, specifically C1 and C2, using a wire we prepared.
-    The input is the interrupt button found on the motherboard. It is connected to PORTD through the motherboard itself.
-
-    General description:
-    The LED follows a series of predefined light colors depending on the pressing and releasing of the input button.
-*/
-
-/*      The following table shows the possible states and state relations 
-+--------------+--------+--------------+--------+
-| Current State| Button | Next State   | Output |
-+--------------+--------+--------------+--------+
-| INIT         |      0 | INIT         | Red    |
-| INIT         |      1 | AMBER        | Red    |
-| AMBER        |      0 | GREEN_RELEASE| Amber  |
-| AMBER        |      1 | AMBER        | Amber  |
-| GREEN_RELEASE|      0 | GREEN_RELEASE| Green  |
-| GREEN_RELEASE|      1 | RED          | Green  |
-| RED          |      0 | OFF          | Red    |
-| RED          |      1 | RED          | Red    |
-| OFF          |      0 | OFF          | Off    |
-| OFF          |      1 | GREEN_HELD   | Off    |
-| GREEN_HELD   |      0 | INIT         | Red    |
-| GREEN_HELD   |      1 | GREEN_HELD   | Green  |
-+--------------+--------+--------------+--------+
-*/
-
-/*  
-    The following states were abbreviated to make it easier on the programming team : INIT, AMBER, GREEN_R, RED, OFF, GREEN_H.
+    File name:  p1.cpp
 */
 
 #define F_CPU 8000000UL
@@ -55,6 +23,8 @@ const int COLOR_NONE = 0b00;
 const int OUTPUT_PORT = 0xff;
 const int INPUT_PORT = 0x00;
 
+
+//GREEN_R is the green state after release; GREEN_H is the green state while being held
 enum State
 {
     INIT = 0,
@@ -66,8 +36,8 @@ enum State
     NB_STATES
 };
 
-volatile bool pastPressedState = false;
-volatile State currentState = State(INIT);
+volatile bool pastPressedState = false;//volatile variable that remembers the previous state
+volatile State currentState = State(INIT);//volatile variable that remembers the previous state
 
 void printRedLight()
 {
