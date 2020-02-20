@@ -42,10 +42,15 @@ void initialisation(void)
     // il faut sensibiliser les interruptions externes aux
     // changements de niveau du bouton-poussoir
     // en ajustant le registre EICRA
-    EICRA |= 0b01;
+    EICRA |= (1<<ISC00); 
 
     // sei permet de recevoir à nouveau des interruptions.
     sei();
+}
+
+//À creer
+ISR(TIMER1_COMPA_vect){
+
 }
 
 // placer le bon type de signal d'interruption
