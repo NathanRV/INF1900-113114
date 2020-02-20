@@ -15,14 +15,24 @@ volatile bool isButtonHeld = true;
 volatile bool conditionFulfilled = false;
 volatile uint8_t counterRunTimes;
 
+//Delay miliseconds function (NOT WORKING RIGHT BECAUSE CONVERSION UINT8_T INT)
+void delayMs(uint8_t Ms){
+    if(Ms<0){
+        Ms=-Ms;
+    }
+    uint8_t ms=Ms;
+    for(uint8_t i=0;i<ms;i++){ //delay 1 s
+        _delay_loop_2(2000); //4 CPU cycles * 2 000=8 000
+        //8 000*Ms=8 000 000 instructions = 1sec
+    }
+
+}
 
 //États
 enum State
 {
     INIT = 0,//Timer starts
-    CONDITION, //Green 0,5 seconds, wait 2 sec
-    RED,  //RED blinks 2 times/second for counter/2 times
-    GREEN,  //for 1 second
+    CONDITION, //light routine launched
     NB_STATES
 };
 
@@ -92,13 +102,6 @@ ISR(TIMER1_COMPA_vect){
         conditionFulfilled = true;
         increaseState(currentState);
     }
-    /*else if(counterRunTimes==(120+5)){
-        PORTC=NO_COLOR;
-        increaseState(currentState);
-    }
-    else if(counterRunTimes==){
-
-    }*/
     counterRunTimes++;
 }
 
@@ -124,6 +127,46 @@ ISR(INT0_vect)
 }
 
 
+//Routine
+//Green 0,5 seconds, no color for 2 sec
+//Red blinks 2 times/second for counter/2 times
+//Green for 1 second
+//return to init state
+void routine(){
+    PORTC=COLOR_GREEN;
+    for(uint8_t i=0;i<50;i++){ //delay 0,5 s
+        _delay_loop_2(20000); //4 CPU cycles * 20 000=80 000
+        //80 000*50=4 000 000 instructions = 0,5sec
+    }
+    PORTC=NO_COLOR;
+    for(uint8_t i=0;i<200;i++){ //delay 2 s
+        _delay_loop_2(20000); //4 CPU cycles * 20 000=80 000
+        //80 000*200=16 000 000 instructions = 2sec
+    }
+
+    uint8_t currentCounter;
+    currentCounter=counterRunTimes;
+
+    for(uint8_t i =0;i<currentCounter; i++){
+        PORTC=COLOR_RED;
+        _delay_loop_2(20000); //0,1 sec
+        PORTC=NO_COLOR;
+        for(uint8_t i=0;i<50;i++){ //delay 0,5 s
+            _delay_loop_2(20000); //4 CPU cycles * 20 000=80 000
+            //80 000*50=4 000 000 instructions = 0,5sec
+        }
+    }
+
+
+    PORTC=COLOR_GREEN;
+    for(uint8_t i=0;i<100;i++){ //delay 1 s
+        _delay_loop_2(20000); //4 CPU cycles * 20 000=80 000
+        //80 000*100=8 000 000 instructions = 1sec
+    }
+    currentState=State::INIT;//return init state
+}
+
+
 int main()
 {
 	initialisation();
@@ -138,32 +181,12 @@ int main()
                 PORTC=NO_COLOR;
                 break;
 
-            case State::CONDITION: //Green 0,5 seconds, wait 2 sec
-                PORTC=COLOR_GREEN;
+            case State::CONDITION: //Green 0,5 seconds, wait 2 sec                
+                routine();
+                break;
                 
-                //delay 0,5 s
-                //increaseState(currentState);
-                break;
-
-            case State::WAIT_TWO:
-                PORTC=NO_COLOR;
-                break;
-
-            case State::RED://RED blinks 2 times/second for counter/2 times
-                uint8_t currentCounter=counterRunTimes;
-                for(uint8_t i =0;i<currentCounter; i++){
-                    PORTC=COLOR_RED;
-                    _delay_ms(65535);
-                    PORTC=NO_COLOR;
-                }
-                break;
-
-            case State::GREEN:
-                //PORTC=COLOR_GREEN;
-                break;
         }
     }
     
     return 0;
 }
-
