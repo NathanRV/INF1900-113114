@@ -1,14 +1,18 @@
-#define F_CPU 8000000
+#include "controleDEL.h"
 
-#include <avr/io.h>
-#include <util/delay.h>
+void CouleurAmbre() {
+    PORTB = COULEUR_ROUGE;
+    _delay_ms(10);
+    PORTB = COULEUR_VERT;
+    _delay_ms(10);
+}
 
-int main(void) {
-    DDRB = 0xff;
-    for(;;){
-        _delay_ms(5);
-        PORTB = 0b01;
-        _delay_ms(5);
-        PORTB = 0b10;
-    }
+void CouleurRouge(uint8_t duree) {
+    PORTB = COULEUR_ROUGE;
+    _delay_ms(duree);
+}
+
+void CouleurVert(uint8_t duree) {
+    PORTB = COULEUR_VERT;
+    _delay_ms(duree);
 }
