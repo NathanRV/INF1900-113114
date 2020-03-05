@@ -17,3 +17,23 @@
 #define ENTREE           0x00;
 #define SORTIE           0xff;
 
+/**
+ * Définition des valeurs que peut prendre les décalages
+ * de bits
+ */
+
+#define DECALAGE_1BIT 1;
+#define DECALAGE_2BIT 2;
+#define DECALAGE_3BIT 3;
+#define DECALAGE_4BIT 4;
+#define DECALAGE_5BIT 5;
+#define DECALAGE_6BIT 6;
+#define DECALAGE_7BIT 7;
+
+/**
+ * Définition des intensités lumineuses 
+ * Valeur entre 0 et 255
+ */
+
+#define LUMIERE_HAUTE 230;
+#define LUMIERE_BASSE 100;
