@@ -1,7 +1,11 @@
 #include "constantes.h"
 
-void CouleurAmbre();
+void couleurAmbre();
 
-void CouleurVert();
+void couleurVert();
 
-void CouleurRouge();
+void couleurRouge();
+
+void attenuerDEL();
+
+void clignoterDEL(uint8_t couleur, uint8_t duree, uint8_t repetitions);
