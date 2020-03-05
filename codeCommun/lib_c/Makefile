@@ -23,13 +23,13 @@ MCU=atmega324pa
 
 # Nom de votre projet
 # (utilisez un seul mot, exemple: 'monprojet')
-PROJECTNAME=probleme2
+PROJECTNAME=lib_c
 
 # Fichiers sources
 # Utilisez le suffixe .cpp pour les fichiers C++
 # Listez tous les fichiers a compiler, separes par
 # un espace. exemple: 'tp1.c tp2.cpp':
-PRJSRC= probleme2.cpp can.cpp
+PRJSRC= $(wildcard *.cpp)
 
 # Inclusions additionnels (ex: -I/path/to/mydir)
 INC=
@@ -62,6 +62,8 @@ AVRDUDE_PROGRAMMERID=usbasp
 
 #compilateur utilise
 CC=avr-gcc
+
+AR=ar
 #pour copier le contenu d'un fichier objet vers un autre
 OBJCOPY=avr-objcopy
 #pour permettre le transfert vers le microcontroleur
@@ -71,7 +73,11 @@ REMOVE=rm -f
 # HEXFORMAT -- format pour les fichiers produient .hex
 HEXFORMAT=ihex
 
-
+vars: 
+	@echo "src = $(PRJSRC)"
+	@echo "OBJDEPS = $(OBJDEPS)"
+	@echo "trg = $(TRG)"
+	@echo "CFLAGS = $(CFLAGS)"
 
 ####### Options de compilation #######
 
@@ -132,7 +138,7 @@ all: $(TRG)
 
 # Implementation de la cible
 $(TRG): $(OBJDEPS)
-	$(CC) $(LDFLAGS) -o $(TRG) $(OBJDEPS) \
+	$(AR) $(LIBFLAGS) -o $(TRG) $(OBJDEPS) \
 	-lm $(LIBS)
 
 # Production des fichiers object
