@@ -23,19 +23,19 @@ MCU=atmega324pa
 
 # Nom de votre projet
 # (utilisez un seul mot, exemple: 'monprojet')
-PROJECTNAME=lib_c
+PROJECTNAME=main
 
 # Fichiers sources
 # Utilisez le suffixe .cpp pour les fichiers C++
 # Listez tous les fichiers a compiler, separes par
 # un espace. exemple: 'tp1.c tp2.cpp':
-PRJSRC= $(wildcard *.cpp)
+PRJSRC=main.cpp
 
 # Inclusions additionnels (ex: -I/path/to/mydir)
-INC=
+INC=-I ../lib_c 
 
 # Libraires a lier (ex: -lmylib)
-LIBS=
+LIBS= -l ../lib_c -lib_c
 
 # Niveau d'optimization
 # Utilisez s (size opt), 1, 2, 3 ou 0 (off)
@@ -62,8 +62,6 @@ AVRDUDE_PROGRAMMERID=usbasp
 
 #compilateur utilise
 CC=avr-gcc
-
-AR=ar
 #pour copier le contenu d'un fichier objet vers un autre
 OBJCOPY=avr-objcopy
 #pour permettre le transfert vers le microcontroleur
@@ -73,12 +71,7 @@ REMOVE=rm -f
 # HEXFORMAT -- format pour les fichiers produient .hex
 HEXFORMAT=ihex
 
-vars: 
-	@echo "AR  = $(AR)"
-	@echo "src = $(PRJSRC)"
-	@echo "OBJDEPS = $(OBJDEPS)"
-	@echo "trg = $(TRG)"
-	@echo "CFLAGS = $(CFLAGS)"
+
 
 ####### Options de compilation #######
 
@@ -94,7 +87,7 @@ CXXFLAGS=-fno-exceptions
 # Linker pour lier les librairies utilisees
 LDFLAGS=-Wl,-Map,$(TRG).map -mmcu=$(MCU)
 
-
+DEBUG = -DDEBUG
 
 ####### Cible (Target) #######
 
@@ -131,7 +124,7 @@ OBJDEPS=$(CFILES:.c=.o) \
 # En plus de la commande make qui permet de compiler
 # votre projet, vous pouvez utilisez les commandes
 # make all, make install et make clean
-.PHONY: all install clean 
+.PHONY: all install clean debug make_lib
 
 # Make all permet simplement de compiler le projet
 #
@@ -139,8 +132,8 @@ all: $(TRG)
 
 # Implementation de la cible
 $(TRG): $(OBJDEPS)
-	$(AR) $(LIBFLAGS) -o $(TRG) $(OBJDEPS) \
-	
+	$(CC) $(LDFLAGS) -o $(TRG) $(OBJDEPS) \
+	-lm $(LIBS)
 
 # Production des fichiers object
 # De C a objet
@@ -160,6 +153,11 @@ $(TRG): $(OBJDEPS)
 %.hex: %.out
 	$(OBJCOPY) -j .text -j .data \
 		-O $(HEXFORMAT) $< $@
+
+#Make debug 
+debug: CXXFLAGS += $(DEBUG) -g 
+debug: CCFLAGS += $(DEBUG) -g
+debug: all
 
 # Make install permet de compiler le projet puis
 # d'ecrire le programme en memoire flash dans votre

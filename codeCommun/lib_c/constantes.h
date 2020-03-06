@@ -5,35 +5,35 @@
  * dans la librairie commune
  */
 
-#define COULEUR_ROUGE    0x01;
-#define COULEUR_VERT     0x02;
-#define LUMIERE_ETEINTE   0x00;
+#define COULEUR_ROUGE     0x01
+#define COULEUR_VERT      0x02
+#define LUMIERE_ETEINTE   0x00
 
 /**
  * Définition de la valeur des entrées et des sorties
  * que peut prendre les PORTs
  */
 
-#define ENTREE           0x00;
-#define SORTIE           0xff;
+#define ENTREE           0x00
+#define SORTIE           0xff
 
 /**
  * Définition des valeurs que peut prendre les décalages
  * de bits
  */
 
-#define DECALAGE_1BIT 1;
-#define DECALAGE_2BIT 2;
-#define DECALAGE_3BIT 3;
-#define DECALAGE_4BIT 4;
-#define DECALAGE_5BIT 5;
-#define DECALAGE_6BIT 6;
-#define DECALAGE_7BIT 7;
+#define DECALAGE_1BIT 1
+#define DECALAGE_2BIT 2
+#define DECALAGE_3BIT 3
+#define DECALAGE_4BIT 4
+#define DECALAGE_5BIT 5
+#define DECALAGE_6BIT 6
+#define DECALAGE_7BIT 7
 
 /**
  * Définition des intensités lumineuses 
  * Valeur entre 0 et 255
  */
 
-#define LUMIERE_HAUTE 230;
-#define LUMIERE_BASSE 100;
+#define SEUIL_LUMIERE_HAUTE 230
+#define SEUIL_LUMIERE_BASSE 100
