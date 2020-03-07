@@ -41,3 +41,8 @@
 
 #define SEUIL_LUMIERE_HAUTE 230
 #define SEUIL_LUMIERE_BASSE 100
+
+/**
+ * Définition de la valeur du bouton d'interruption lorsqu'appuyé
+ */
+#define EST_APPUYE (PIND & 0x04)
