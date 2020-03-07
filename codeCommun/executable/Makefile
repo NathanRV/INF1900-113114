@@ -32,10 +32,10 @@ PROJECTNAME=main
 PRJSRC=main.cpp
 
 # Inclusions additionnels (ex: -I/path/to/mydir)
-INC=-I ../lib_c 
+INC=-I ../lib_c
 
 # Libraires a lier (ex: -lmylib)
-LIBS= -l ../lib_c -lib_c
+LIBS=-L ../lib_c -l_c
 
 # Niveau d'optimization
 # Utilisez s (size opt), 1, 2, 3 ou 0 (off)
@@ -85,7 +85,7 @@ CFLAGS=-I. -MMD $(INC) -g -mmcu=$(MCU) -O$(OPTLEVEL) \
 CXXFLAGS=-fno-exceptions     
 
 # Linker pour lier les librairies utilisees
-LDFLAGS=-Wl,-Map,$(TRG).map -mmcu=$(MCU)
+LDFLAGS=-Wl,-Map,$(TRG).map -mmcu=$(MCU) -static
 
 DEBUG = -DDEBUG
 
@@ -124,7 +124,7 @@ OBJDEPS=$(CFILES:.c=.o) \
 # En plus de la commande make qui permet de compiler
 # votre projet, vous pouvez utilisez les commandes
 # make all, make install et make clean
-.PHONY: all install clean debug make_lib
+.PHONY: all install clean debug 
 
 # Make all permet simplement de compiler le projet
 #

@@ -1,5 +1,5 @@
 #include "memoire_24.h"
-
+#include "constantes.h"
 
 /**
  * 

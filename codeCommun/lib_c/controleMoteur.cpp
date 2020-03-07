@@ -5,7 +5,7 @@
 //PWM genere par les interruptions.
 //@param in : intensiteGauche et intensiteDroite, une valeur entre 0 et 255 qui 
 // represente la frequence a la quelle le PWM sera generee sur la roue gauche ou droite
-void partirMoteur (uint8_t intensiteGauche, uint8_t intensiteDroite) {
+void partirMoteurs (uint8_t intensiteGauche, uint8_t intensiteDroite) {
     // mise à un des sorties OC1A et OC1B sur comparaison
     // réussie en mode PWM 8 bits, phase correcte
     // et valeur de TOP fixe à 0xFF (mode #1 de la table 17-6

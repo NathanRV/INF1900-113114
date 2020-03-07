@@ -1,5 +1,9 @@
 #define F_CPU 8000000
 
+#include <stdint.h>
+#include <avr/io.h>
+#include <util/delay.h>
+
 /**
  * Définition et déclaration des constantes utilisées
  * dans la librairie commune

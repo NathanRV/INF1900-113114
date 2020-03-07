@@ -1,9 +1,7 @@
 #ifndef INITIALISATION_H
 #define INITIALISATION_H
 
-#include <avr/io.h>
-#include <util/delay.h>
-
+#include "constantes.h"
 
 void initialiserDDRA(uint8_t etat);
 void initialiserDDRB(uint8_t etat);

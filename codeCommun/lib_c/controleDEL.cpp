@@ -23,7 +23,7 @@ void couleurAmbre() {
 
 void couleurRouge(uint8_t duree) {
     PORTB = COULEUR_ROUGE;
-    _delay_ms(duree);
+    attendre(duree);
 }
 
 /**
@@ -35,7 +35,7 @@ void couleurRouge(uint8_t duree) {
 
 void couleurVert(uint8_t duree) {
     PORTB = COULEUR_VERT;
-    _delay_ms(duree);
+    attendre(duree);
 }
 
 /**
@@ -62,9 +62,9 @@ void attenuerDEL(uint8_t periode, uint8_t couleurLumiere, uint8_t dureeAttenuati
     for (uint8_t i = 0; i < dureeAttenuation; ++i) {
         uint8_t intensiteDecrementation = floor(i * periode / dureeAttenuation);
         PORTB = couleurLumiere;
-        _delay_ms(periode - intensiteDecrementation);
+        attendre(periode - intensiteDecrementation);
         PORTB = LUMIERE_ETEINTE;
-        _delay_ms(intensiteDecrementation);
+        attendre(intensiteDecrementation);
     }
 }
 
@@ -79,9 +79,9 @@ void attenuerDEL(uint8_t periode, uint8_t couleurLumiere, uint8_t dureeAttenuati
 
 void clignoterDEL(uint8_t couleurLumiere, uint8_t dureeClignotement, uint8_t repetitions) {
     for (uint8_t i = 0; i < repetitions; ++i) {
-        PORTB = couleur;
-        _delay_ms(dureeClignotement);
+        PORTB = couleurLumiere;
+        attendre(dureeClignotement);
         PORTB = LUMIERE_ETEINTE;
-        _delay_ms(dureeClignotement);
+        attendre(dureeClignotement);
     }
 }

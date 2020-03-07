@@ -63,7 +63,7 @@ AVRDUDE_PROGRAMMERID=usbasp
 #compilateur utilise
 CC=avr-gcc
 
-AR=ar
+AR=avr-ar
 #pour copier le contenu d'un fichier objet vers un autre
 OBJCOPY=avr-objcopy
 #pour permettre le transfert vers le microcontroleur
@@ -94,12 +94,12 @@ CXXFLAGS=-fno-exceptions
 # Linker pour lier les librairies utilisees
 LDFLAGS=-Wl,-Map,$(TRG).map -mmcu=$(MCU)
 
-
+LIBFLAGS=-crs
 
 ####### Cible (Target) #######
 
 #Nom des cibles par defaut
-TRG=$(PROJECTNAME).out
+TRG=$(PROJECTNAME).a
 HEXROMTRG=$(PROJECTNAME).hex
 HEXTRG=$(HEXROMTRG) $(PROJECTNAME).ee.hex
 
@@ -116,7 +116,7 @@ CPPFILES=$(filter %.cpp, $(PRJSRC))
 
 # Liste de tout les fichiers objet que nous devons creer
 OBJDEPS=$(CFILES:.c=.o) \
-	$(CPPFILES:.cpp=.o)
+		$(CPPFILES:.cpp=.o)
 	
 # Pour plus d'information sur cette section, consulter :
 # http://bit.ly/257R53E	
@@ -141,7 +141,6 @@ all: $(TRG)
 $(TRG): $(OBJDEPS)
 	$(AR) $(LIBFLAGS) -o $(TRG) $(OBJDEPS) \
 	
-
 # Production des fichiers object
 # De C a objet
 %.o: %.c
