@@ -1,5 +1,52 @@
 #include "controleMoteur.h"
 
+/** 
+ * Fonction permettant d'ajuster le pourcentage du PWM sur la PIND
+ * 
+ * @param pourcentageDroite : uint8_t, pourcentage de 0 à 100 du PWM
+ * @param pourcentageGauche : uint8_t, pourcentage de 0 à 100 du PWM
+ * @return void
+*/
+void ajusterPWM ( uint8_t pourcentageDroite, uint8_t pourcentageGauche ) {
+    initialiserDDRD(SORTIE);
+    TCNT1 = 0; //compteur à 0
+
+	//f=fréquence, N=facteur de prescaler
+	//fOCnA=fclk/2N(1+OCRnX)
+
+    if(pourcentage­Droite>100){   //verification du pourcentage
+        pourcentageDroite=100;
+    }
+	if(pourcentageGauche>100){
+		pourcentageGauche=100;
+	}
+
+	//Formule de transfert du pourcentage à valeur numérique
+	uint8_t maxValeurCompteur = 0xFFFF; //65 535
+	uint8_t maxValeurPourcent = round(maxValeurCompteur / 100); //655
+	uint8_t valeurDroite = maxValeurPourcent * pourcentageDroite;
+	uint8_t valeurGauche = maxValeurPourcent * pourcentageGauche;
+
+	//Valeur de comparaison
+	OCR1A = valeurGauche;
+	OCR1B = valeurDroite ;
+
+	//Timer/Counter Control Register 1 A (TCCR1A)
+	TCCR1A |= (1<<COM1A1) |(1<<COM1B1) ; 
+	//OC1A OC1B mis à 0 sur comparaison, mis à 1 lorsque BOTTOM
+	//PWM rapide
+
+	//Timer/Counter Control Register 1 B (TCCR1B)
+	//Facteur prescaler
+	TCCR1B |= (1 << CS11);
+	//Divisé par 8 (CS11)
+	TCCR1B |= (1 << WGM13) | (1 << WGM12) | (1 << WGM11);
+	//mode PWM rapide (16 bits) où TOP=ICR1
+	ICR1 = maxValeurCompteur;
+
+	TCCR1C = 0;
+}
+
 /**
  * Fonction permettant d'ajuster l'intensite du
  * PWM genere par les interruptions.
@@ -55,49 +102,4 @@ void dirigerRoues (uint8_t direction, uint8_t intensite) {
 void tournerRoues (uint8_t direction, uint8_t intensiteGauche, uint8_t intensiteDroite) {
     PORTD = direction;
     partirMoteurs(intensiteGauche, intensiteDroite);
-}
-
-
-
-
-/** 
- * Fonction permettant d'ajuster le pourcentage du PWM sur la PIND
- * 
- * @param pourcentage : uint8_t, pourcentage de 0 à 100 du PWM
- * @return void
-*/
-void ajusterPWM ( uint8_t pourcentage ) {
-    initialiserDDRD(SORTIE);
-    TCNT1 = 0; //compteur à 0
-
-	//f=fréquence, N=facteur de prescaler
-	//fOCnA=fclk/2N(1+OCRnX)
-
-    if(pourcentage­>100){   //verification du pourcentage
-        pourcentage=100;
-    }
-
-	//Formule de transfert du pourcentage à valeur numérique
-	uint8_t maxValueCounter = 0xFFFF; //65 535
-	uint8_t maxValuePercent = round(maxValueCounter / 100); //655
-	uint8_t value = maxValuePercent * percent;
-
-	//Valeur de comparaison
-	OCR1A = value ;
-	OCR1B = value ;
-
-	//Timer/Counter Control Register 1 A (TCCR1A)
-	TCCR1A |= (1<<COM1A1) |(1<<COM1B1) ; 
-	//OC1A OC1B mis à 0 sur comparaison, mis à 1 lorsque BOTTOM
-	//PWM rapide
-
-	//Timer/Counter Control Register 1 B (TCCR1B)
-	//Facteur prescaler
-	TCCR1B |= (1 << CS11);
-	//Divisé par 8 (CS11)
-	TCCR1B |= (1 << WGM13) | (1 << WGM12) | (1 << WGM11);
-	//mode PWM rapide (16 bits) où TOP=ICRn
-	ICR1 = maxValueCounter;
-
-	TCCR1C = 0;
 }
