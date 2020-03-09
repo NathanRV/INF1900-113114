@@ -1,3 +1,12 @@
+/*
+    Date:       9-03-2020
+    Authors:    David Saikali,          2015144
+                Nathan Ramsay-Vejlens,  1989944
+                Agnes Sam Yue Chi,      1954192
+                Jefferson Lam,          1963528
+    File name:  controleMoteur.h
+*/
+
 #ifndef CONTROLE_MOTEUR_H
 #define CONTROLE_MOTEUR_H
 
@@ -11,17 +20,6 @@
  * @return void
 */
 void ajusterPWM ( uint8_t pourcentageDroite, uint8_t pourcentageGauche );
-
-/**
- * Fonction permettant d'ajuster l'intensite du
- * PWM genere par les interruptions.
- * @param intensiteGauche : uint8_t, une valeur entre 0 et 255 qui 
- * represente la frequence a la quelle le PWM sera generee sur la roue gauche
- * @param intensiteDroite : uint8_t, une valeur entre 0 et 255 qui 
- * represente la frequence a la quelle le PWM sera generee sur la roue droite
- * @return void
- */
-void partirMoteurs (uint8_t intensite);
 
 /**
  * Fonction permettant d'ajuster l'intensite du

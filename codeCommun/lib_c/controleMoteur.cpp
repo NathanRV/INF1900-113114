@@ -1,3 +1,12 @@
+/*
+    Date:       9-03-2020
+    Authors:    David Saikali,          2015144
+                Nathan Ramsay-Vejlens,  1989944
+                Agnes Sam Yue Chi,      1954192
+                Jefferson Lam,          1963528
+    File name:  controleMoteur.cpp
+*/
+
 #include "controleMoteur.h"
 
 /** 
@@ -45,28 +54,6 @@ void ajusterPWM ( uint8_t pourcentageDroite, uint8_t pourcentageGauche ) {
 	ICR1 = maxValeurCompteur;
 
 	TCCR1C = 0;
-}
-
-/**
- * Fonction permettant d'ajuster l'intensite du
- * PWM genere par les interruptions.
- * @param intensiteGauche : uint8_t, une valeur entre 0 et 255 qui 
- * represente la frequence a la quelle le PWM sera generee sur la roue gauche
- * @param intensiteDroite : uint8_t, une valeur entre 0 et 255 qui 
- * represente la frequence a la quelle le PWM sera generee sur la roue droite
- * @return void
- */
-void partirMoteurs (uint8_t intensiteGauche, uint8_t intensiteDroite) {
-    // mise à un des sorties OC1A et OC1B sur comparaison
-    // réussie en mode PWM 8 bits, phase correcte
-    // et valeur de TOP fixe à 0xFF (mode #1 de la table 17-6
-    // page 177 de la description technique du ATmega324PA)
-    OCR1A = intensiteGauche;
-    OCR1B = intensiteDroite;
-    // division d'horloge par 8 - implique une frequence de PWM fixe
-    TCCR1A |= (1 << WGM10 | 1 << COM1A0 | 1 << COM1A1);
-    TCCR1B |= (1 << CS11);
-    TCCR1C = 0;
 }
 
 /**

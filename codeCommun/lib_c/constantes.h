@@ -1,3 +1,12 @@
+/*
+    Date:       9-03-2020
+    Authors:    David Saikali,          2015144
+                Nathan Ramsay-Vejlens,  1989944
+                Agnes Sam Yue Chi,      1954192
+                Jefferson Lam,          1963528
+    File name:  constantes.h
+*/
+
 #define F_CPU 8000000
 
 #include <stdint.h>
@@ -47,3 +56,10 @@
  * Définition de la valeur du bouton d'interruption lorsqu'appuyé
  */
 #define EST_APPUYE (PIND & 0x04)
+
+/**
+ * Definition des constantes pour la direction des roues
+ */
+ #define AVANCER     0b1010
+ #define RECULER     0b1111
+ #define IMMOBILISER 0b0000
