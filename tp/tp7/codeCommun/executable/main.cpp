@@ -11,5 +11,4 @@
 int main() {
     initialiserDDRB(SORTIE);
     initialiserDDRD(ENTREE);
-    couleurAmbre();
 }

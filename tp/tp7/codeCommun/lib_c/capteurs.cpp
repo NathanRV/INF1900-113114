@@ -30,7 +30,7 @@ void controlerLumiereSelonIntensite(uint8_t lumiereBasse, uint8_t lumiereHaute) 
             PORTB = lumiereBasse;
         }
         else {
-            couleurAmbre();
+            couleurAmbre(1000);
         }    
     }
 }

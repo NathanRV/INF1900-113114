@@ -16,7 +16,7 @@
  * @param duree Duree (en ms) dactivation de la lumiere
  * @return void
  */
-void couleurAmbre();
+void couleurAmbre(uint8_t duree);
 
 /**
  * Permet à la DEL de prendre la couleur verte
