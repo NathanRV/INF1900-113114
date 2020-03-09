@@ -14,7 +14,7 @@ void ajusterPWM ( uint8_t pourcentageDroite, uint8_t pourcentageGauche ) {
 	//f=fréquence, N=facteur de prescaler
 	//fOCnA=fclk/2N(1+OCRnX)
 
-    if(pourcentage­Droite>100){   //verification du pourcentage
+    if(pourcentageDroite>100){   //verification du pourcentage
         pourcentageDroite=100;
     }
 	if(pourcentageGauche>100){

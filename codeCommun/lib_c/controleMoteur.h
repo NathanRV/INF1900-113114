@@ -3,7 +3,6 @@
 
 #include "constantes.h"
 #include "initialisation.h"
-#include <avr/interrupt.h>
 
 /** 
  * Fonction permettant d'ajuster le pourcentage du PWM sur la PIND

@@ -2,7 +2,6 @@
 #define ANTIREBOND_H
 
 #include "constantes.h"
-#include <avr/io.h> 
 
 /**
  * Fonction antirebond

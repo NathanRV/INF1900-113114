@@ -38,5 +38,18 @@ void initialiserDDRD(uint8_t etat);
  */
 void initialiserDDR(uint8_t etatA, uint8_t etatB, uint8_t etatC, uint8_t etatD);
 
+/**
+ * Initialise l'UART dans le microcontroleur
+ * @param void
+ * return void
+ */
+void initialisationUART(void);
+
+/**
+ * Initialise la direction des ports A, B, C et D avec une routine d'interruption
+ * @param etatA, etatB, etatC, etatD (ENTREE ou SORTIE)
+ * @return void
+ */
+void initialisationInteruption(uint8_t etatA, uint8_t etatB, uint8_t etatC, uint8_t etatD);
 
 #endif //INITIALISATION_H

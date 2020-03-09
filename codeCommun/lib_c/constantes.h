@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
 
 /**
  * Définition et déclaration des constantes utilisées

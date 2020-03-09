@@ -42,8 +42,62 @@ void initialiserDDRD(uint8_t etat) {
  * @return void
  */
 void initialiserDDR(uint8_t etatA, uint8_t etatB, uint8_t etatC, uint8_t etatD) {
-    DDRA = etatA;
-    DDRB = etatB;
-    DDRC = etatC;
-    DDRD = etatD;
+    initialiserDDRA(etatA);
+    initialiserDDRB(etatB);
+    initialiserDDRC(etatC);
+    initialiserDDRD(etatD);
+}
+
+/**
+ * Initialise l'UART dans le microcontroleur
+ * @param void
+ * return void
+ */
+void initialisationUART(void) {
+
+    // 2400 bauds. Nous vous donnons la valeur des deux
+    // premier registres pour vous éviter des complications
+
+    UBRR0H = 0;
+    UBRR0L = 0xCF;
+
+    // permettre la réception et la transmission par le UART0
+
+    UCSR0A =0;
+
+    UCSR0B |= (1 << RXEN0) | (1 << TXEN0); 
+    //modifie  receive,transfer enabled
+
+    // Format des trames: 8 bits, 1 stop bits, none parity
+
+    UCSR0C |= (1 << UCSZ11) | (1 << UCSZ10); //char size
+}
+
+/**
+ * Initialise la direction des ports A, B, C et D avec une routine d'interruption
+ * @param etatA, etatB, etatC, etatD (ENTREE ou SORTIE)
+ * @return void
+ */
+void initialisationInteruption(uint8_t etatA, uint8_t etatB, uint8_t etatC, uint8_t etatD) {
+
+    /*cli est une routine qui bloque toutes les interruptions.
+    Il serait bien mauvais d'être interrompu alors que
+    le microcontroleur n'est pas prêt...*/
+    cli();
+
+    // configurer et choisir les ports pour les entrées
+    // et les sorties. DDRx... Initialisez bien vos variables
+    initialiserDDR(etatA, etatB, etatC, etatD);
+
+    // cette procédure ajuste le registre EIMSK
+    // de l’ATmega324PA pour permettre les interruptions externes
+    EIMSK |= (1 << INT0);
+
+    // il faut sensibiliser les interruptions externes aux
+    // changements de niveau du bouton-poussoir
+    // en ajustant le registre EICRA
+    EICRA |= 0b01;
+
+    // sei permet de recevoir à nouveau des interruptions.
+    sei();
 }

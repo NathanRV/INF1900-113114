@@ -1,6 +1,6 @@
 #include "antirebond.h"
  
-#define EST_APPUYE = (PIND & 0x04)
+
 const double DELAI_REBOND_MS = 10; 
 
 /**

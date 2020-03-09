@@ -17,4 +17,4 @@ void transmissionUART(uint8_t donnee);
  * @param adresse : adresse memoire où écrire (par défaut 0x00)
  * @return void
  */
-void ecrireMessageMemoire(Memoire24CXXX* memoire, char message [], const uint16_t adresse=0x00);
+void ecrireMessageMemoire(Memoire24CXXX* memoire, char* message, const uint16_t adresse=0x00);
