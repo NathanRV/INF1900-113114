@@ -4,6 +4,6 @@
 #include "constantes.h"
 #include <avr/io.h> 
 
-bool boutonSiAppuye(void);
+bool boutonAntiRebond(void);
 
 #endif //ANTIREBOND_H

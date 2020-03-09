@@ -1,15 +1,18 @@
 #include "antirebond.h"
-
+ 
+#define EST_APPUYE = (PIND & 0x04)
 const double DELAI_REBOND_MS = 10; 
 
 /**
  * Fonction antirebond
- * @return Un booléen qui évalue si le bouton et encore poussé apres un délai.
+ * @return Un booléen qui évalue si le bouton est encore enfoncé apres un délai.
  */
-bool boutonSiAppuye(void) {
+bool boutonAntiRebond(void) {
     if(EST_APPUYE) {
         _delay_ms(DELAI_REBOND_MS);
-        return true;
+        if(EST_APPUYE){
+            return true;
+        }
     }
     return false;
 }
