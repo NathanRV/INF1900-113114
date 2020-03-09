@@ -5,6 +5,14 @@
 #include "initialisation.h"
 #include <avr/interrupt.h>
 
+/** 
+ * Fonction permettant d'ajuster le pourcentage du PWM sur la PIND
+ * 
+ * @param pourcentage : uint8_t, pourcentage de 0 à 100 du PWM
+ * @return void
+*/
+void ajusterPWM ( uint8_t pourcentageDroite, uint8_t pourcentageGauche );
+
 /**
  * Fonction permettant d'ajuster l'intensite du
  * PWM genere par les interruptions.
@@ -43,12 +51,5 @@ void dirigerRoues (uint8_t direction, uint8_t intensite);
  */
 void tournerRoues (uint8_t direction, uint8_t intensiteGauche, uint8_t intensiteDroite);
 
-/** 
- * Fonction permettant d'ajuster le pourcentage du PWM sur la PIND
- * 
- * @param pourcentage : uint8_t, pourcentage de 0 à 100 du PWM
- * @return void
-*/
-void ajusterPWM ( uint8_t pourcentage );
 
 #endif //CONTROLE_MOTEUR_H
