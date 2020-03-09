@@ -62,4 +62,3 @@
  */
  #define AVANCER     0b1010
  #define RECULER     0b1111
- #define IMMOBILISER 0b0000

@@ -32,7 +32,7 @@ void transmissionUART(uint8_t donnee) {
 /**
  * Écrit message en memoire
  * @param memoire : instance de Memoire24CXXX*
- * @param message : message à écrire (char [])
+ * @param message : message à écrire (char*)
  * @param adresse : adresse memoire où écrire (par défaut 0x00)
  * @return void
  */

@@ -16,7 +16,7 @@
  * @param pourcentageGauche : uint8_t, pourcentage de 0 à 100 du PWM
  * @return void
 */
-void ajusterPWM ( uint8_t pourcentageDroite, uint8_t pourcentageGauche ) {
+void ajusterPWM( uint8_t pourcentageDroite, uint8_t pourcentageGauche ) {
     initialiserDDRD(SORTIE);
     TCNT1 = 0; //compteur à 0
 
@@ -62,7 +62,7 @@ void ajusterPWM ( uint8_t pourcentageDroite, uint8_t pourcentageGauche ) {
  * @return void
  */
 void arreterMoteur () {
-    partirMoteurs(0, 0);
+    ajusterPWM(0, 0);
 }
 
 /**
@@ -74,7 +74,7 @@ void arreterMoteur () {
  */
 void dirigerRoues (uint8_t direction, uint8_t intensite) {
     PORTD = direction;
-    partirMoteurs(intensite, intensite);
+    ajusterPWM(intensite, intensite);
 }
 
 /**
@@ -88,5 +88,5 @@ void dirigerRoues (uint8_t direction, uint8_t intensite) {
  */
 void tournerRoues (uint8_t direction, uint8_t intensiteGauche, uint8_t intensiteDroite) {
     PORTD = direction;
-    partirMoteurs(intensiteGauche, intensiteDroite);
+    ajusterPWM(intensiteGauche, intensiteDroite);
 }
