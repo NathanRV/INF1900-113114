@@ -3,39 +3,46 @@
 /**
  * Permet à la DEL de prendre la couleur ambre
  * 
- * @param none
+ * @param duree Duree (en ms) dactivation de la lumiere
  * @return void
  */
 
-void couleurAmbre() {
-    PORTB = COULEUR_ROUGE;
-    _delay_ms(10);
-    PORTB = COULEUR_VERT;
-    _delay_ms(10);
+void couleurAmbre(uint16_t duree)
+{
+    uint16_t repetitions=duree/20;  //2*10 ms de delai
+    for (uint16_t i = 0; i < repetitions; i++)
+    {
+        PORTB = COULEUR_ROUGE;
+        attendre_ms(10);
+        PORTB = COULEUR_VERT;
+        attendre_ms(10);
+    }
 }
 
 /**
  * Permet à la DEL de prendre la couleur rouge
  * 
- * @param duree Duree de temps d'activation de la lumiere
+ * @param duree Duree (en ms) d'activation de la lumiere
  * @return void
  */
 
-void couleurRouge(uint8_t duree) {
+void couleurRouge(uint16_t duree)
+{
     PORTB = COULEUR_ROUGE;
-    attendre(duree);
+    attendre_ms(duree);
 }
 
 /**
  * Permet à la DEL de prendre la couleur verte
  * 
- * @param duree Duree de temps d'activation de la lumiere
+ * @param duree Duree (en ms) d'activation de la lumiere
  * @return void
  */
 
-void couleurVert(uint8_t duree) {
+void couleurVert(uint16_t duree)
+{
     PORTB = COULEUR_VERT;
-    attendre(duree);
+    attendre_ms(duree);
 }
 
 /**
@@ -45,7 +52,8 @@ void couleurVert(uint8_t duree) {
  * @return void
  */
 
-void couleurEteint() {
+void couleurEteint()
+{
     PORTB = LUMIERE_ETEINTE;
 }
 
@@ -54,17 +62,19 @@ void couleurEteint() {
  * 
  * @param periode La période d'atténuation
  * @param couleurLumiere La couleur que va prendre la DEL 
- * @param dureeAttenuation Le temps que prend la DEL pour atténuer complètement
+ * @param dureeAttenuation Le temps(ms) que prend la DEL pour atténuer complètement
  * @return void
  */
 
-void attenuerDEL(uint8_t periode, uint8_t couleurLumiere, uint8_t dureeAttenuation) {
-    for (uint8_t i = 0; i < dureeAttenuation; ++i) {
+void attenuerDEL(uint16_t periode, uint8_t couleurLumiere, uint16_t dureeAttenuation)
+{
+    for (uint8_t i = 0; i < dureeAttenuation; ++i)
+    {
         uint8_t intensiteDecrementation = floor(i * periode / dureeAttenuation);
         PORTB = couleurLumiere;
-        attendre(periode - intensiteDecrementation);
+        attendre_ms(periode - intensiteDecrementation);
         PORTB = LUMIERE_ETEINTE;
-        attendre(intensiteDecrementation);
+        attendre_ms(intensiteDecrementation);
     }
 }
 
@@ -72,16 +82,18 @@ void attenuerDEL(uint8_t periode, uint8_t couleurLumiere, uint8_t dureeAttenuati
  * Permet à la DEL de clignoter selon un rythme spécifié 
  * 
  * @param couleurLumiere La couleur que va prendre la DEL
- * @param dureeClignotement La duree en temps de chaque clignotement
+ * @param dureeClignotement La duree en ms de chaque clignotement (50/50)
  * @param repetitions Nombre de clignotements
  * @return void
  */
 
-void clignoterDEL(uint8_t couleurLumiere, uint8_t dureeClignotement, uint8_t repetitions) {
-    for (uint8_t i = 0; i < repetitions; ++i) {
+void clignoterDEL(uint8_t couleurLumiere, uint16_t dureeClignotement, uint8_t repetitions)
+{
+    for (uint8_t i = 0; i < repetitions; ++i)
+    {
         PORTB = couleurLumiere;
-        attendre(dureeClignotement);
+        attendre_ms(dureeClignotement);
         PORTB = LUMIERE_ETEINTE;
-        attendre(dureeClignotement);
+        attendre_ms(dureeClignotement);
     }
 }
