@@ -1,3 +1,3 @@
 #include "constantes.h"
 
-void attendre (int millisecondes);
+void attendre_ms(int millisecondes);

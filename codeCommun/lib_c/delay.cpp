@@ -7,8 +7,8 @@
  * @param millisecondes la duree de délai en ms
  * @return void
  */
-void attendre (int millisecondes) {
-    for (int i = 0; i < millisecondes; ++i) {
+void attendre_ms(uint16_t millisecondes) {
+    for (uint16_t i = 0; i < millisecondes; ++i) {
         _delay_ms(1);
     }
 }
