@@ -72,9 +72,9 @@ void couleurEteint()
  */
 void attenuerDEL(uint16_t periode, uint8_t couleurLumiere, uint16_t dureeAttenuation)
 {
-    for (uint8_t i = 0; i < dureeAttenuation; ++i)
+    for (uint16_t i = 0; i < dureeAttenuation; ++i)
     {
-        uint8_t intensiteDecrementation = floor(i * periode / dureeAttenuation);
+        uint16_t intensiteDecrementation = floor(i * periode / dureeAttenuation);
         PORTB = couleurLumiere;
         attendre_ms(periode - intensiteDecrementation);
         PORTB = COULEUR_AUCUNE;
