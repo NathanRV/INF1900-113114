@@ -73,13 +73,6 @@ REMOVE=rm -f
 # HEXFORMAT -- format pour les fichiers produient .hex
 HEXFORMAT=ihex
 
-vars: 
-	@echo "AR  = $(AR)"
-	@echo "src = $(PRJSRC)"
-	@echo "OBJDEPS = $(OBJDEPS)"
-	@echo "trg = $(TRG)"
-	@echo "CFLAGS = $(CFLAGS)"
-
 ####### Options de compilation #######
 
 # Flags pour le compilateur en C
@@ -139,7 +132,8 @@ all: $(TRG)
 
 # Implementation de la cible
 $(TRG): $(OBJDEPS)
-	$(AR) $(LIBFLAGS) -o $(TRG) $(OBJDEPS) \
+	$(AR) $(LIBFLAGS) -o $(TRG) $(OBJDEPS) 
+	@echo "Librairie créée"
 	
 # Production des fichiers object
 # De C a objet
@@ -159,6 +153,15 @@ $(TRG): $(OBJDEPS)
 %.hex: %.out
 	$(OBJCOPY) -j .text -j .data \
 		-O $(HEXFORMAT) $< $@
+
+
+# Make vars permet de savoir quelles sont les variables utilisés
+vars: 
+	@echo "AR  = $(AR)"
+	@echo "src = $(PRJSRC)"
+	@echo "OBJDEPS = $(OBJDEPS)"
+	@echo "trg = $(TRG)"
+	@echo "CFLAGS = $(CFLAGS)"
 
 # Make install permet de compiler le projet puis
 # d'ecrire le programme en memoire flash dans votre
