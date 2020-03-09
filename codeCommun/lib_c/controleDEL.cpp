@@ -54,7 +54,7 @@ void couleurVert(uint16_t duree)
 
 void couleurEteint()
 {
-    PORTB = LUMIERE_ETEINTE;
+    PORTB = COULEUR_AUCUNE;
 }
 
 /**
@@ -73,7 +73,7 @@ void attenuerDEL(uint16_t periode, uint8_t couleurLumiere, uint16_t dureeAttenua
         uint8_t intensiteDecrementation = floor(i * periode / dureeAttenuation);
         PORTB = couleurLumiere;
         attendre_ms(periode - intensiteDecrementation);
-        PORTB = LUMIERE_ETEINTE;
+        PORTB = COULEUR_AUCUNE;
         attendre_ms(intensiteDecrementation);
     }
 }
@@ -93,7 +93,7 @@ void clignoterDEL(uint8_t couleurLumiere, uint16_t dureeClignotement, uint8_t re
     {
         PORTB = couleurLumiere;
         attendre_ms(dureeClignotement);
-        PORTB = LUMIERE_ETEINTE;
+        PORTB = COULEUR_AUCUNE;
         attendre_ms(dureeClignotement);
     }
 }

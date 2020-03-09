@@ -2,10 +2,11 @@
 
 /**
  * Utilise le capteur de photoresistance afin de détecter
- * les variations d'intensite lumineuse
+ * les variations d'intensite lumineuse. Ambre lorsque intensité
+ * entre seuil minimum et maximum.
  * 
- * @param lumiereBasse couleur de la DEL lors du seuil minimum
- * @param lumiereHaute couleur de la DEL lors du seuil maximum
+ * @param lumiereBasse couleur de la DEL lors du seuil minimum (COULEUR_*)
+ * @param lumiereHaute couleur de la DEL lors du seuil maximum (COULEUR_*)
  * @return void
  */
 

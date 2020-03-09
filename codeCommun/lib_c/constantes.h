@@ -11,7 +11,7 @@
 
 #define COULEUR_ROUGE     0x01
 #define COULEUR_VERT      0x02
-#define LUMIERE_ETEINTE   0x00
+#define COULEUR_AUCUNE    0x00
 
 /**
  * Définition de la valeur des entrées et des sorties
