@@ -31,10 +31,10 @@ void ajusterPWM( uint8_t pourcentageDroite, uint8_t pourcentageGauche ) {
 	}
 
 	//Formule de transfert du pourcentage à valeur numérique
-	uint8_t maxValeurCompteur = 0xFFFF; //65 535
+	uint16_t maxValeurCompteur = 0xFFFF; //65 535
 	uint8_t maxValeurPourcent = round(maxValeurCompteur / 100); //655
-	uint8_t valeurDroite = maxValeurPourcent * pourcentageDroite;
-	uint8_t valeurGauche = maxValeurPourcent * pourcentageGauche;
+	uint16_t valeurDroite = maxValeurPourcent * pourcentageDroite;
+	uint16_t valeurGauche = maxValeurPourcent * pourcentageGauche;
 
 	//Valeur de comparaison
 	OCR1A = valeurGauche;

@@ -16,7 +16,7 @@
  * @param duree Duree (en ms) dactivation de la lumiere
  * @return void
  */
-void couleurAmbre();
+void couleurAmbre(uint16_t duree);
 
 /**
  * Permet à la DEL de prendre la couleur verte
@@ -24,7 +24,7 @@ void couleurAmbre();
  * @param duree Duree (en ms) d'activation de la lumiere
  * @return void
  */
-void couleurVert(uint8_t duree);
+void couleurVert(uint16_t duree);
 
 /**
  * Permet à la DEL de prendre la couleur rouge
@@ -32,7 +32,7 @@ void couleurVert(uint8_t duree);
  * @param duree Duree (en ms) d'activation de la lumiere
  * @return void
  */
-void couleurRouge(uint8_t duree);
+void couleurRouge(uint16_t duree);
 
 /**
  * Force la DEL à être éteinte
@@ -50,7 +50,7 @@ void couleurEteint();
  * @param dureeAttenuation Le temps(ms) que prend la DEL pour atténuer complètement
  * @return void
  */
-void attenuerDEL(uint8_t period, uint8_t couleurLumiere, uint8_t dureeAttenuation);
+void attenuerDEL(uint16_t period, uint8_t couleurLumiere, uint16_t dureeAttenuation);
 
 /**
  * Permet à la DEL de clignoter selon un rythme spécifié 
@@ -60,4 +60,4 @@ void attenuerDEL(uint8_t period, uint8_t couleurLumiere, uint8_t dureeAttenuatio
  * @param repetitions Nombre de clignotements
  * @return void
  */
-void clignoterDEL(uint8_t couleur, uint8_t duree, uint8_t repetitions);
+void clignoterDEL(uint8_t couleurLumiere, uint16_t dureeClignotement, uint8_t repetitions);
