@@ -11,8 +11,12 @@
 int main() {
     initialiserDDRB(SORTIE);
     initialiserDDRD(ENTREE);
+<<<<<<< HEAD
     boutonAntiRebond();
     Memoire24CXXX memoire;
     transmissionUART(250);
     controlerLumiereSelonIntensite(COULEUR_ROUGE, COULEUR_VERT);
+=======
+    couleurAmbre(10000);
+>>>>>>> fcd91e98f5df9aa20140f0981ac95b243ff72ad9
 }
