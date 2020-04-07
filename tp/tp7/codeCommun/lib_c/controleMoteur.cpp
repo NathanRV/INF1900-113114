@@ -12,13 +12,26 @@
 /** 
  * Fonction permettant d'ajuster le pourcentage du PWM sur la PIND
  * 
- * @param pourcentageDroite : int8_t, pourcentage de -100 à 100 du PWM
  * @param pourcentageGauche : int8_t, pourcentage de -100 à 100 du PWM
+ * @param pourcentageDroite : int8_t, pourcentage de -100 à 100 du PWM
  * @return void
 */
-void ajusterPWM( int8_t pourcentageDroite, int8_t pourcentageGauche ) {
+void ajusterPWM( int8_t pourcentageGauche, int8_t pourcentageDroite ) {
     initialiserDDRD(SORTIE);
+
+	TCNT1 = 0; //compteur à 0
+	
 	PORTD = 0; //Effacer PORTD
+
+	//Direction gauche
+	if(pourcentageGauche < 0){
+		PORTD |= RECULERGAUCHE;
+		pourcentageGauche = -pourcentageGauche;
+	}
+	else
+	{
+		PORTD |= AVANCERGAUCHE;
+	}
 
 	//Direction droite
 	if(pourcentageDroite < 0){
@@ -29,54 +42,45 @@ void ajusterPWM( int8_t pourcentageDroite, int8_t pourcentageGauche ) {
 	{
 		PORTD |= AVANCERDROITE;
 	}
-	
-	//Direction gauche
-	if(pourcentageDroite < 0){
-		PORTD |= RECULERGAUCHE;
-		pourcentageGauche = -pourcentageGauche;
-	}
-	else
-	{
-		PORTD |= AVANCERGAUCHE;
-	}
-
-
-    TCNT1 = 0; //compteur à 0
 
 	//f=fréquence, N=facteur de prescaler
 	//fOCnA=fclk/2N(1+OCRnX)
 
-    if(pourcentageDroite>100){   //verification du pourcentage
-        pourcentageDroite=100;
+    // mise à un des sorties OC1A et OC1B sur comparaison
+    // réussie en mode PWM 8 bits, phase correcte
+    // et valeur de TOP fixe à 0xFF (mode #1 de la table 17-6
+    // page 177 de la description technique du ATmega324PA)
+
+    if(pourcentageDroite>99){   //verification du pourcentage
+        pourcentageDroite=99;
     }
-	if(pourcentageGauche>100){
-		pourcentageGauche=100;
+	if(pourcentageGauche>99){
+		pourcentageGauche=99;
 	}
 
-	//Formule de transfert du pourcentage à valeur numérique
-	uint16_t maxValeurCompteur = 0xFFFF; //65 535
-	uint8_t maxValeurPourcent = round(maxValeurCompteur / 100); //655
-	uint16_t valeurDroite = maxValeurPourcent * pourcentageDroite;
-	uint16_t valeurGauche = maxValeurPourcent * pourcentageGauche;
+    //Formule de transfert du pourcentage à valeur numérique
+	uint8_t maxValeurCompteur = 0xFF; //255
+	uint16_t valeurDroite = maxValeurCompteur * pourcentageDroite;
+	uint16_t valeurGauche = maxValeurCompteur * pourcentageGauche;
+    valeurDroite = round(valeurDroite / 100);
+    valeurGauche = round(valeurGauche / 100);
 
-	//Valeur de comparaison
-	OCR1A = valeurGauche;
-	OCR1B = valeurDroite ;
+    OCR1A = valeurDroite; 
+    //Output compare Register 1A correspond à D5 (OC1A)
+    
+    OCR1B = valeurGauche;
+    //Output compare Register 1B correspond à D4 (OC1B)
+    
+    // division d'horloge par 8 - implique une frequence de PWM fixe
 
-	//Timer/Counter Control Register 1 A (TCCR1A)
-	TCCR1A |= (1<<COM1A1) |(1<<COM1B1) ; 
-	//OC1A OC1B mis à 0 sur comparaison, mis à 1 lorsque BOTTOM
-	//PWM rapide
+    //Voir p.123 & section 16.10.4
+    TCCR1A |= (1 << WGM10) | (1 << COM1A1) | (1 << COM1B1); //Table 16-4.
+    //  COM1A1&COM1B1:Clear OCnA/OCnB on Compare Match when up-counting. 
+    //  Set OCnA/OCnB on Compare Match when downcounting.
+    //  WGM10:PWM, phase correct, 8-bit
+    TCCR1B |= (1 << CS11); //prescaler 8
 
-	//Timer/Counter Control Register 1 B (TCCR1B)
-	//Facteur prescaler
-	TCCR1B |= (1 << CS11);
-	//Divisé par 8 (CS11)
-	TCCR1B |= (1 << WGM13) | (1 << WGM12) | (1 << WGM11);
-	//mode PWM rapide (16 bits) où TOP=ICR1
-	ICR1 = maxValeurCompteur;
-
-	TCCR1C = 0;
+    TCCR1C = 0; 
 }
 
 /**

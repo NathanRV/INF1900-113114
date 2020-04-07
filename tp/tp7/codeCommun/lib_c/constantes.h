@@ -59,7 +59,6 @@
 
 /**
  * Definition des constantes pour la direction des roues
- * D7 D2
  */
  #define AVANCERGAUCHE     0b01
  #define RECULERGAUCHE     0b10

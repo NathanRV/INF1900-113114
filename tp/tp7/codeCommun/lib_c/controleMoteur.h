@@ -16,11 +16,11 @@
 /** 
  * Fonction permettant d'ajuster le pourcentage du PWM sur la PIND
  * 
- * @param pourcentageDroite : int8_t, pourcentage de -100 à 100 du PWM
  * @param pourcentageGauche : int8_t, pourcentage de -100 à 100 du PWM
+ * @param pourcentageDroite : int8_t, pourcentage de -100 à 100 du PWM
  * @return void
 */
-void ajusterPWM ( int8_t pourcentageDroite, int8_t pourcentageGauche );
+void ajusterPWM( int8_t pourcentageGauche, int8_t pourcentageDroite );
 
 /**
  * Fonction permettant d'ajuster l'intensite du
