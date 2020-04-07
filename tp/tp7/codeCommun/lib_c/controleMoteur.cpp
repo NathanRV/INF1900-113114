@@ -67,7 +67,7 @@ void arreterMoteur () {
 
 /**
  * Fonction permettant de donner une direction et une intensité aux deux roues
- * @param direction: uint8_t, la direction dans laquelle la roue va tourner
+ * @param direction: bool, la direction dans laquelle la roue va tourner
  * @param intensite : uint8_t, une valeur entre 0 et 255 qui 
  * represente la frequence a la quelle le PWM sera generee sur le moteur
  * @return void

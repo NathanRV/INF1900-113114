@@ -30,23 +30,24 @@ void arreterMoteur ();
 
 /**
  * Fonction permettant de donner une direction et une intensité aux deux roues
- * @param direction: uint8_t, la direction dans laquelle la roue va tourner
+ * @param direction: bool, la direction dans laquelle la roue va tourner
  * @param intensite : uint8_t, une valeur entre 0 et 255 qui 
  * represente la frequence a la quelle le PWM sera generee sur le moteur
  * @return void
  */
-void dirigerRoues (uint8_t direction, uint8_t intensite);
+void dirigerRoues (bool direction, uint8_t intensite);
 
 /**
  * Fonction permettant de donner une direction et une intensité aux deux roues
- * @param direction: uint8_t, la direction dans laquelle la roue va tourner
+ * @param directionDroite: bool, la direction dans laquelle la roue droite va tourner
+ * @param directionGauche: bool, la direction dans laquelle la roue gauche va tourner
  * @param intensiteGauche : uint8_t, une valeur entre 0 et 255 qui 
  * represente la frequence a la quelle le PWM sera generee sur la roue gauche
  * @param intensiteDroite : uint8_t, une valeur entre 0 et 255 qui 
  * represente la frequence a la quelle le PWM sera generee sur la roue droite
  * @return void
  */
-void tournerRoues (uint8_t direction, uint8_t intensiteGauche, uint8_t intensiteDroite);
+void tournerRoues (bool directionDroite, bool directionGauche, uint8_t intensiteGauche, uint8_t intensiteDroite);
 
 
 #endif //CONTROLE_MOTEUR_H
