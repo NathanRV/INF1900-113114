@@ -15,7 +15,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+#include "constantes.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <avr/io.h>
@@ -30,8 +30,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /**
  * Construit un objet LCM.
  *
- * @param ddr	`Data Direction Register' AVR utilisé par l'afficheur
- * @param port	Port AVR occupé par l'afficheur
+ * @param ddr	`Data Direction Register' AVR utilisï¿½ par l'afficheur
+ * @param port	Port AVR occupï¿½ par l'afficheur
  */
 LCM::LCM(volatile uint8_t* ddr, volatile uint8_t* port) : _last_index(0),
 _last_bc_index(0), _blink_en(LCM_FW_DEF_BLINK_EN), _cur_en(LCM_FW_DEF_CUR_EN),
@@ -43,7 +43,7 @@ _port(port), _lib(false), _li(0) {
 }
 
 /**
- * Détruit proprement un objet LCM.
+ * Dï¿½truit proprement un objet LCM.
  *
  */
 LCM::~LCM(void) {
@@ -51,10 +51,10 @@ LCM::~LCM(void) {
 }
 
 /**
- * Ajoute un caractère et positionne le curseur après.
+ * Ajoute un caractï¿½re et positionne le curseur aprï¿½s.
  *
- * @param ch	Caractère (du jeu de caractères de l'afficheur)
- * @return	Auto-référence
+ * @param ch	Caractï¿½re (du jeu de caractï¿½res de l'afficheur)
+ * @return	Auto-rï¿½fï¿½rence
  */
 LCM& LCM::put(const char ch) {
 	char buf [2] = {ch, '\0'};
@@ -64,21 +64,21 @@ LCM& LCM::put(const char ch) {
 }
 
 /**
- * Écrit une chaîne à l'index désiré, en effaçant tout avant ou non.
+ * ï¿½crit une chaï¿½ne ï¿½ l'index dï¿½sirï¿½, en effaï¿½ant tout avant ou non.
  *
- * @param msg	Message à écrire (chaîne ASCIIZ composée du jeu de l'afficheur)
- * @param index	Index où écrire le message (0 à 31)
- * @param cb	Effacer tout le contenu affiché avant
+ * @param msg	Message ï¿½ ï¿½crire (chaï¿½ne ASCIIZ composï¿½e du jeu de l'afficheur)
+ * @param index	Index oï¿½ ï¿½crire le message (0 ï¿½ 31)
+ * @param cb	Effacer tout le contenu affichï¿½ avant
  */
 void LCM::write(const char* msg, const uint8_t index, const bool cb) {
 	if (msg == NULL) {
 		return;
 	}
-	uint8_t msg_len = cp_strlen(msg), // Taille totale de la chaîne
-		up_len = 0, // Taille de la sous-chaîne sur la première ligne
+	uint8_t msg_len = cp_strlen(msg), // Taille totale de la chaï¿½ne
+		up_len = 0, // Taille de la sous-chaï¿½ne sur la premiï¿½re ligne
 		i;
 
-	// Désactiver le `blink'/curseur pendant l'ajout (esthétique)
+	// Dï¿½sactiver le `blink'/curseur pendant l'ajout (esthï¿½tique)
 	const bool blink_en_bkup = _blink_en, cur_en_bkup = _cur_en;
 	en_blink(false);
 	en_cur(false);
@@ -115,7 +115,7 @@ void LCM::write(const char* msg, const uint8_t index, const bool cb) {
 		}
 	}
 
-	// Réactiver le `blink'/curseur
+	// Rï¿½activer le `blink'/curseur
 	set_bc_index(_last_bc_index);
 	en_blink(blink_en_bkup);
 	en_cur(cur_en_bkup);
@@ -129,15 +129,15 @@ void LCM::write(const char* msg, const uint8_t index, const bool cb) {
  *
  */
 void LCM::clear() {
-	lcmd_disp_clear(_port); // `Display Clear' matériel
-	_last_index = 0; // Réinitialiser l'index virtuel
+	lcmd_disp_clear(_port); // `Display Clear' matï¿½riel
+	_last_index = 0; // Rï¿½initialiser l'index virtuel
 	set_bc_index(_last_bc_index); // Fixer la position du `blink'/curseur
 }
 
 /**
- * Active le `blink' (clignotement noir d'un caractère).
+ * Active le `blink' (clignotement noir d'un caractï¿½re).
  *
- * @param state		Nouvel état
+ * @param state		Nouvel ï¿½tat
  */
 void LCM::en_blink(const bool state) {
 	lcmd_disp_on_off(LCM_C_ON, _cur_en ? LCM_C_ON : LCM_C_OFF,
@@ -146,9 +146,9 @@ void LCM::en_blink(const bool state) {
 }
 
 /**
- * Active le curseur "réel" (curseur sous un caractère).
+ * Active le curseur "rï¿½el" (curseur sous un caractï¿½re).
  *
- * @param state		Nouvel état
+ * @param state		Nouvel ï¿½tat
  */
 void LCM::en_cur(const bool state) {
 	lcmd_disp_on_off(LCM_C_ON, state ? LCM_C_ON : LCM_C_OFF,
@@ -157,7 +157,7 @@ void LCM::en_cur(const bool state) {
 }
 
 /**
- * Fixe l'index du `blink'/curseur (partagée).
+ * Fixe l'index du `blink'/curseur (partagï¿½e).
  *
  * @param index		Nouvel index
  */
@@ -176,12 +176,12 @@ void LCM::set_bc_index(const uint8_t index) {
 }
 
 /**
- * Construit un nouveau caractère personnalisé.
+ * Construit un nouveau caractï¿½re personnalisï¿½.
  *
- * @param index		Index du nouveau caractère dans la CG RAM (0 à 7)
- * @param rows		Tableau des rangées (8 entiers dont les 5 LSBs sont
- *			les 5 pixels d'une rangée, le premier pixel de chaque
- *			rangée étant le LSB et la première rangée étant le
+ * @param index		Index du nouveau caractï¿½re dans la CG RAM (0 ï¿½ 7)
+ * @param rows		Tableau des rangï¿½es (8 entiers dont les 5 LSBs sont
+ *			les 5 pixels d'une rangï¿½e, le premier pixel de chaque
+ *			rangï¿½e ï¿½tant le LSB et la premiï¿½re rangï¿½e ï¿½tant le
  *			premier entier)
  */
 void LCM::build_cc(const uint8_t index, const uint8_t* rows) {
@@ -191,15 +191,15 @@ void LCM::build_cc(const uint8_t index, const uint8_t* rows) {
 	lcmd_cgr_set_addr(index << 3, _port);
 
 	for (uint8_t i = 0; i < 8; ++i) {
-		lcmd_write(rows[i], _port); // Écrire la rangée actuelle
+		lcmd_write(rows[i], _port); // ï¿½crire la rangï¿½e actuelle
 	}
 }
 
 /**
- * Raccourci pour ajouter une sous-chaîne à l'index en cours.
+ * Raccourci pour ajouter une sous-chaï¿½ne ï¿½ l'index en cours.
  *
- * @param msg	Sous-chaîne à joindre (voir "LCM::write")
- * @return	Auto-référence
+ * @param msg	Sous-chaï¿½ne ï¿½ joindre (voir "LCM::write")
+ * @return	Auto-rï¿½fï¿½rence
  */
 LCM& LCM::operator<<(const char* msg) {
 	if (msg == NULL) {
@@ -211,10 +211,10 @@ LCM& LCM::operator<<(const char* msg) {
 }
 
 /**
- * Raccourci pour ajouter un entier non signé à l'index en cours.
+ * Raccourci pour ajouter un entier non signï¿½ ï¿½ l'index en cours.
  *
- * @param u	Entier non signé à joindre (voir "LCM::write")
- * @return	Auto-référence
+ * @param u	Entier non signï¿½ ï¿½ joindre (voir "LCM::write")
+ * @return	Auto-rï¿½fï¿½rence
  */
 LCM& LCM::operator<<(const uint16_t u) {
 	sprintf(_buf, LCM_FW_UINT_DEFFORMAT, u);
@@ -224,10 +224,10 @@ LCM& LCM::operator<<(const uint16_t u) {
 }
 
 /**
- * Raccourci pour ajouter un entier signé à l'index en cours.
+ * Raccourci pour ajouter un entier signï¿½ ï¿½ l'index en cours.
  *
- * @param i	Entier non signé à joindre (voir "LCM::write")
- * @return	Auto-référence
+ * @param i	Entier non signï¿½ ï¿½ joindre (voir "LCM::write")
+ * @return	Auto-rï¿½fï¿½rence
  */
 LCM& LCM::operator<<(const int16_t i) {
 	sprintf(_buf, LCM_FW_INT_DEFFORMAT, i);
@@ -237,10 +237,10 @@ LCM& LCM::operator<<(const int16_t i) {
 }
 
 /**
- * Raccourci pour ajouter un entier signé à l'index en cours.
+ * Raccourci pour ajouter un entier signï¿½ ï¿½ l'index en cours.
  *
- * @param i	Entier non signé à joindre (voir "LCM::write")
- * @return	Auto-référence
+ * @param i	Entier non signï¿½ ï¿½ joindre (voir "LCM::write")
+ * @return	Auto-rï¿½fï¿½rence
  */
 LCM& LCM::operator<<(const char c) {
 	sprintf(_buf, "%c", c);
@@ -250,11 +250,11 @@ LCM& LCM::operator<<(const char c) {
 }
 
 /**
- * Raccourci pour remplacer le contenu actuel par une chaîne (index 0) ou par
- * une chaîne spécifique selon la valeur de `_lpos' et `_lib'.
+ * Raccourci pour remplacer le contenu actuel par une chaï¿½ne (index 0) ou par
+ * une chaï¿½ne spï¿½cifique selon la valeur de `_lpos' et `_lib'.
  *
- * @param msg	Chaîne à écrire (voir "LCM::write")
- * @return	Sous-chaîne à ajouter
+ * @param msg	Chaï¿½ne ï¿½ ï¿½crire (voir "LCM::write")
+ * @return	Sous-chaï¿½ne ï¿½ ajouter
  */
 const char* LCM::operator=(const char* msg) {
 	if (msg == NULL) {
@@ -271,10 +271,10 @@ const char* LCM::operator=(const char* msg) {
 }
 
 /**
- * Fait en sorte que le prochain operator= appelé écrira à un index spécifique.
+ * Fait en sorte que le prochain operator= appelï¿½ ï¿½crira ï¿½ un index spï¿½cifique.
  *
- * @param index		Index d'écriture pour le prochain operator=
- * @return		Auto-référence
+ * @param index		Index d'ï¿½criture pour le prochain operator=
+ * @return		Auto-rï¿½fï¿½rence
  */
 LCM& LCM::operator[](const uint8_t index) {
 	if (index >= LCM_FW_TOT_CH) {
@@ -288,10 +288,10 @@ LCM& LCM::operator[](const uint8_t index) {
 }
 
 /**
- * Efface un ou plusieurs caractères avant l'index virtuel en utilisant le
- * caractère LCM_FW_CL_DEFCHAR.
+ * Efface un ou plusieurs caractï¿½res avant l'index virtuel en utilisant le
+ * caractï¿½re LCM_FW_CL_DEFCHAR.
  *
- * @param rem	Nombre de caractères à effacer.
+ * @param rem	Nombre de caractï¿½res ï¿½ effacer.
  */
 void LCM::operator-=(uint8_t rem) {
 	if (rem > _last_index) {

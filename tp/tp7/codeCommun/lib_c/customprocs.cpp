@@ -16,16 +16,17 @@ You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "constantes.h"
 #include <avr/io.h>
 #include <util/delay.h>
 
 #include "customprocs.h"
 
 /**
- * Longueur d'une chaîne ASCIIZ.
+ * Longueur d'une chaï¿½ne ASCIIZ.
  *
- * @param str	Chaîne ASCIIZ
- * @return	Longueur de la chaîne
+ * @param str	Chaï¿½ne ASCIIZ
+ * @return	Longueur de la chaï¿½ne
  */
 uint16_t cp_strlen(const char* str) {
 	uint16_t i = '\0';
@@ -36,12 +37,12 @@ uint16_t cp_strlen(const char* str) {
 }
 
 /**
- * Réimplémentation d'un `itoa'.
+ * Rï¿½implï¿½mentation d'un `itoa'.
  *
- * @param buf16		Buffer de 16 B à fournir
- * @param val		Valeur NON signée à convertir
- * @param base		Base de conversion (2 à 16)
- * @return		Adresse de la chaîne obtenue
+ * @param buf16		Buffer de 16 B ï¿½ fournir
+ * @param val		Valeur NON signï¿½e ï¿½ convertir
+ * @param base		Base de conversion (2 ï¿½ 16)
+ * @return		Adresse de la chaï¿½ne obtenue
  */
 char* cp_itoa(char* buf16, uint16_t val, const uint8_t base) {
 	uint8_t i = 14;
@@ -62,7 +63,7 @@ char* cp_itoa(char* buf16, uint16_t val, const uint8_t base) {
 /**
  * Attend un nombre de millisecondes.
  *
- * @param ms	Nombre de millisecondes à attendre.
+ * @param ms	Nombre de millisecondes ï¿½ attendre.
  */
 void cp_wait_ms(const uint16_t ms) {
 	uint16_t i;

@@ -3,7 +3,7 @@
  Copyright (C) 2009  Philippe Proulx (philippe.proulx@polymtl.ca)
  
  2012-02-08 - Ajout:
- Broche 0 ˆ 0V reliŽe ˆ VO pour un contraste maximal. - L. Tremblay
+ Broche 0 ï¿½ 0V reliï¿½e ï¿½ VO pour un contraste maximal. - L. Tremblay
  
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published by
@@ -19,6 +19,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "constantes.h"
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -28,33 +29,33 @@
 _BV(LCM_DB6) | _BV(LCM_DB5) | _BV(LCM_DB4))
 
 /**
- * Remet à 0 les broches occupées par l'afficheur LCD sur un port.
+ * Remet ï¿½ 0 les broches occupï¿½es par l'afficheur LCD sur un port.
  *
- * @param port	Port AVR occupé par l'afficheur
+ * @param port	Port AVR occupï¿½ par l'afficheur
  */
 static inline void _lcm_cp(volatile uint8_t* port) {
 	*port &= LCM_CL;
 }
 
 /**
- * Active, attend et désactive la ligne EN.
+ * Active, attend et dï¿½sactive la ligne EN.
  *
- * @param port	Port AVR occupé par l'afficheur
+ * @param port	Port AVR occupï¿½ par l'afficheur
  */
 static void _lcm_fast_en(volatile uint8_t* port) {
 	*port |= _BV(LCM_EN);
-	_delay_loop_1(4); // Laisser le temps à l'afficheur de comprendre EN
+	_delay_loop_1(4); // Laisser le temps ï¿½ l'afficheur de comprendre EN
 	*port &= ~_BV(LCM_EN);
 }
 
 /**
- * Envoie une fonction à l'afficheur LCD.
+ * Envoie une fonction ï¿½ l'afficheur LCD.
  *
  * @param rs		Valeur de la ligne RS
  * @param rw		Valeur de la ligne R/W
  * @param db		Valeur du `data bus' (DB7-DB0)
- * @param w_10us	Nombre de (10 µs) à attendre après l'envoi
- * @param port		Port AVR occupé par l'afficheur
+ * @param w_10us	Nombre de (10 ï¿½s) ï¿½ attendre aprï¿½s l'envoi
+ * @param port		Port AVR occupï¿½ par l'afficheur
  */
 static void _lcm_function(const uint8_t rs, const uint8_t rw,
                           const uint8_t db, const uint8_t w_10us, volatile uint8_t* port) {
@@ -77,9 +78,9 @@ static void _lcm_function(const uint8_t rs, const uint8_t rw,
 }
 
 /**
- * Pilote - efface l'affichage en cours avec le caractère 0x20.
+ * Pilote - efface l'affichage en cours avec le caractï¿½re 0x20.
  *
- * @param port		Port AVR occupé par l'afficheur
+ * @param port		Port AVR occupï¿½ par l'afficheur
  */
 void lcmd_disp_clear(volatile uint8_t* port) {
 	_lcm_function(0, 0, 0x01, 164, port);
@@ -88,7 +89,7 @@ void lcmd_disp_clear(volatile uint8_t* port) {
 /**
  * Pilote - effectue un `home' sur l'afficheur.
  *
- * @param port		Port AVR occupé par l'afficheur
+ * @param port		Port AVR occupï¿½ par l'afficheur
  */
 void lcmd_disp_home(volatile uint8_t* port) {
 	_lcm_function(0, 0, 0x02, 164, port);
@@ -97,9 +98,9 @@ void lcmd_disp_home(volatile uint8_t* port) {
 /**
  * Pilote - fixe le `Entry Mode' de l'afficheur.
  *
- * @param id		Incrémentation ou décrémentation des adresses
- * @param s		Activation du décalage d'affichage
- * @param port		Port AVR occupé par l'afficheur
+ * @param id		Incrï¿½mentation ou dï¿½crï¿½mentation des adresses
+ * @param s		Activation du dï¿½calage d'affichage
+ * @param port		Port AVR occupï¿½ par l'afficheur
  */
 void lcmd_entry_sm(const uint8_t id, const uint8_t s, volatile uint8_t* port) {
 	const uint8_t db = (0x04 | (id << 1) | s);
@@ -107,12 +108,12 @@ void lcmd_entry_sm(const uint8_t id, const uint8_t s, volatile uint8_t* port) {
 }
 
 /**
- * Pilote - ajuste certains paramètres d'affichage.
+ * Pilote - ajuste certains paramï¿½tres d'affichage.
  *
  * @param d		Activation de l'affichage
  * @param c		Activation du curseur
  * @param b		Activation du `blink'
- * @param port		Port AVR occupé par l'afficheur
+ * @param port		Port AVR occupï¿½ par l'afficheur
  */
 void lcmd_disp_on_off(const uint8_t d, const uint8_t c, const uint8_t b,
                       volatile uint8_t* port) {
@@ -121,11 +122,11 @@ void lcmd_disp_on_off(const uint8_t d, const uint8_t c, const uint8_t b,
 }
 
 /**
- * Pilote - décale l'affichage complet vers la gauche ou vers la droite.
+ * Pilote - dï¿½cale l'affichage complet vers la gauche ou vers la droite.
  *
- * @param sc		Décaler l'affichage ou déplacer le curseur
+ * @param sc		Dï¿½caler l'affichage ou dï¿½placer le curseur
  * @param rl		Droite ou gauche
- * @param port		Port AVR occupé par l'afficheur
+ * @param port		Port AVR occupï¿½ par l'afficheur
  */
 void lcmd_disp_cur_shift(const uint8_t sc, const uint8_t rl,
                          volatile uint8_t* port) {
@@ -134,11 +135,11 @@ void lcmd_disp_cur_shift(const uint8_t sc, const uint8_t rl,
 }
 
 /**
- * Pilote - fixe certains paramètres de l'afficheur LCD.
+ * Pilote - fixe certains paramï¿½tres de l'afficheur LCD.
  *
  * @param dl		`Data Length' de 8 ou 4 bits
  * @param n		`Dual Line' ou `Single Line'
- * @param port		Port AVR occupé par l'afficheur
+ * @param port		Port AVR occupï¿½ par l'afficheur
  */
 void lcmd_func_set(const uint8_t dl, const uint8_t n, volatile uint8_t* port) {
 	const uint8_t db = (0x20 | (dl << 4) | (n << 3));
@@ -148,8 +149,8 @@ void lcmd_func_set(const uint8_t dl, const uint8_t n, volatile uint8_t* port) {
 /**
  * Pilote - fixe l'adresse en cours de la CG RAM.
  *
- * @param addr		Adresse de la CG RAM (0x00 à 0x3f)
- * @param port		Port AVR occupé par l'afficheur
+ * @param addr		Adresse de la CG RAM (0x00 ï¿½ 0x3f)
+ * @param port		Port AVR occupï¿½ par l'afficheur
  */
 void lcmd_cgr_set_addr(const uint8_t addr, volatile uint8_t* port) {
 	const uint8_t db = (0x40 | addr) & ~_BV(7);
@@ -159,8 +160,8 @@ void lcmd_cgr_set_addr(const uint8_t addr, volatile uint8_t* port) {
 /**
  * Pilote - fixe l'adresse en cours de la DD RAM.
  *
- * @param addr		Adresse de la DD RAM (0x00 à 0x27 et 0x40 à 0x67)
- * @param port		Port AVR occupé par l'afficheur
+ * @param addr		Adresse de la DD RAM (0x00 ï¿½ 0x27 et 0x40 ï¿½ 0x67)
+ * @param port		Port AVR occupï¿½ par l'afficheur
  */
 void lcmd_ddr_set_addr(const uint8_t addr, volatile uint8_t* port) {
 	const uint8_t db = (0x80 | addr);
@@ -168,10 +169,10 @@ void lcmd_ddr_set_addr(const uint8_t addr, volatile uint8_t* port) {
 }
 
 /**
- * Pilote - écrit un octet à l'adresse en cours de la CG RAM ou de la DD RAM.
+ * Pilote - ï¿½crit un octet ï¿½ l'adresse en cours de la CG RAM ou de la DD RAM.
  *
- * @param data		Octet à écrire
- * @param port		Port AVR occupé par l'afficheur
+ * @param data		Octet ï¿½ ï¿½crire
+ * @param port		Port AVR occupï¿½ par l'afficheur
  */
 void lcmd_write(const uint8_t data, volatile uint8_t* port) {
 	_lcm_function(1, 0, data, 4, port);
@@ -180,8 +181,8 @@ void lcmd_write(const uint8_t data, volatile uint8_t* port) {
 /**
  * Pilote - initialise l'afficheur LCD avec une interface 4-bit et `Dual Line'.
  *
- * @param ddr		`Data Direction Register' AVR occupé par l'afficheur
- * @param port		Port AVR occupé par l'afficheur
+ * @param ddr		`Data Direction Register' AVR occupï¿½ par l'afficheur
+ * @param port		Port AVR occupï¿½ par l'afficheur
  */
 void lcmd_init_4bit(volatile uint8_t* ddr, volatile uint8_t* port) {
 	_delay_ms(15.0);

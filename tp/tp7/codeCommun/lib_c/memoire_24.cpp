@@ -25,6 +25,8 @@
 /*                                                                            */
 /******************************************************************************/
 
+#include "constantes.h"
+
 #ifndef F_CPU
 /* fournir un avertissement mais non une erreur */
 # warning "F_CPU pas defini pour 'memoire_24.cpp'"
