@@ -59,6 +59,6 @@ void initialisationUART(void);
  * @param etatA, etatB, etatC, etatD (ENTREE ou SORTIE)
  * @return void
  */
-void initialisationInteruption(uint8_t etatA, uint8_t etatB, uint8_t etatC, uint8_t etatD);
+void initialisationInterruption(uint8_t etatA, uint8_t etatB, uint8_t etatC, uint8_t etatD);
 
 #endif //INITIALISATION_H

@@ -12,12 +12,35 @@
 /** 
  * Fonction permettant d'ajuster le pourcentage du PWM sur la PIND
  * 
- * @param pourcentageDroite : uint8_t, pourcentage de 0 à 100 du PWM
- * @param pourcentageGauche : uint8_t, pourcentage de 0 à 100 du PWM
+ * @param pourcentageDroite : int8_t, pourcentage de -100 à 100 du PWM
+ * @param pourcentageGauche : int8_t, pourcentage de -100 à 100 du PWM
  * @return void
 */
-void ajusterPWM( uint8_t pourcentageDroite, uint8_t pourcentageGauche ) {
+void ajusterPWM( int8_t pourcentageDroite, int8_t pourcentageGauche ) {
     initialiserDDRD(SORTIE);
+	PORTD = 0; //Effacer PORTD
+
+	//Direction droite
+	if(pourcentageDroite < 0){
+		PORTD |= RECULERDROITE;
+		pourcentageDroite = -pourcentageDroite;
+	}
+	else
+	{
+		PORTD |= AVANCERDROITE;
+	}
+	
+	//Direction gauche
+	if(pourcentageDroite < 0){
+		PORTD |= RECULERGAUCHE;
+		pourcentageGauche = -pourcentageGauche;
+	}
+	else
+	{
+		PORTD |= AVANCERGAUCHE;
+	}
+
+
     TCNT1 = 0; //compteur à 0
 
 	//f=fréquence, N=facteur de prescaler
@@ -63,50 +86,4 @@ void ajusterPWM( uint8_t pourcentageDroite, uint8_t pourcentageGauche ) {
  */
 void arreterMoteur () {
     ajusterPWM(0, 0);
-}
-
-/**
- * Fonction permettant de donner une direction et une intensité aux deux roues
- * @param direction: bool, la direction dans laquelle la roue va tourner
- * @param intensite : uint8_t, une valeur entre 0 et 255 qui 
- * represente la frequence a la quelle le PWM sera generee sur le moteur
- * @return void
- */
-void dirigerRoues (bool direction, uint8_t intensite) {
-	if(direction){
-		PORTD |= AVANCERGAUCHE;
-		PORTD |= AVANCERDROITE;
-	}
-	else{
-		PORTD |= RECULERDROITE;
-		PORTD |= RECULERGAUCHE;
-	}
-    ajusterPWM(intensite, intensite);
-}
-
-/**
- * Fonction permettant de donner une direction et une intensité aux deux roues
- * @param directionDroite: bool, la direction dans laquelle la roue droite va tourner
- * @param directionGauche: bool, la direction dans laquelle la roue gauche va tourner
- * @param intensiteGauche : uint8_t, une valeur entre 0 et 255 qui 
- * represente la frequence a la quelle le PWM sera generee sur la roue gauche
- * @param intensiteDroite : uint8_t, une valeur entre 0 et 255 qui 
- * represente la frequence a la quelle le PWM sera generee sur la roue droite
- * @return void
- */
-void tournerRoues (bool directionDroite, bool directionGauche, uint8_t intensiteGauche, uint8_t intensiteDroite) {
-	PORTD = 0;
-	if(directionDroite){
-		PORTD |= AVANCERDROITE;
-	}
-	else{
-		PORTD |= RECULERDROITE;
-	}
-	if(directionGauche){
-		PORTD |= AVANCERGAUCHE;
-	}
-	else{
-		PORTD |= RECULERGAUCHE;
-	}
-    ajusterPWM(intensiteGauche, intensiteDroite);
 }
