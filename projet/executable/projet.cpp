@@ -6,6 +6,7 @@
                 Jefferson Lam,          1963528
     File name:  main.cpp
 */
+#define F_CPU 8000000
 
 #include "controleDEL.h"
 #include "controleMoteur.h"
@@ -19,11 +20,91 @@
 #include "lcm_so1602dtr_m_fw.h"
 #include "customprocs.h"
 /**
- * 
- *
- *
- *
+ * Manoeuvre 3 (OK - DNGR - DNGR)
+ * Vitesse initiale : (-50, 50). On laisse passer 1000 ms.
+ * On change la vitesse pour (66, 66) et on laisse passer 2000 ms.
+ * On change la vitesse pour (50, -50) et on laisse passer 1000 ms.
+ * On change la vitesse pour (78, 78) et on laisse passer 2000 ms.
+ * Fin de la manoeuvre.
  */
+void manoeuvre3()
+{
+    ajusterPWM(-50, 50);
+    attendre_ms(1000);
+
+    ajusterPWM(66, 66);
+    attendre_ms(2000);
+
+    ajusterPWM(50, -50);
+    attendre_ms(1000);
+
+    ajusterPWM(78, 78);
+    attendre_ms(2000);
+}
+
+/** Manoeuvre 4 (DNGR - DNGR - OK)
+ * Vitesse initiale : (50, -50). On laisse passer 1000 ms.
+ * On change la vitesse pour (66, 66) et on laisse passer 2000 ms.
+ * On change la vitesse pour (-50, 50) et on laisse passer 1000 ms.
+ * On change la vitesse pour (78, 78) et on laisse passer 2000 ms.
+ * Fin de la manoeuvre.
+ */
+void manoeuvre4()
+{
+    ajusterPWM(50, -50);
+    attendre_ms(1000);
+
+    ajusterPWM(66, 66);
+    attendre_ms(2000);
+
+    ajusterPWM(-50, 50);
+    attendre_ms(1000);
+
+    ajusterPWM(78, 78);
+    attendre_ms(2000);
+}
+
+/** Manoeuvre 5 (DNGR - DNGR - DNGR)
+ * Vitesse initiale : (50, -50). On laisse passer 2000 ms.
+ * On change la vitesse pour (0, 0) et on passe à l'étape suivante.
+ * La vitesse monte graduellement de (0, 0) à (63, 63) à raison de +3 par 125 ms.
+ * À (63, 63), on laisse passer 2000 ms.
+ * Fin de la manoeuvre.
+ */
+void manoeuvre5()
+{
+    ajusterPWM(50, -50);
+    attendre_ms(2000);
+
+    ajusterPWM(0, 0);
+
+    for (int i = 0; i < 64; i += 3)
+    {
+        ajusterPWM(i, i);
+        attendre_ms(125);
+    }
+
+    attendre_ms(1875); //125 ms deja ecoules
+}
+
+/** Manoeuvre 6 (ATTN - OK - ATTN)
+ * Vitesse initiale : (90, 90).
+ * La vitesse descend graduellement de (90, 90) à (41, 41) à raison de -7 par 500 ms.
+ * À (41, 41), on laisse passer 2000 ms.
+ * Fin de la manoeuvre.
+ */
+void manoeuvre6()
+{
+    ajusterPWM(90, 90);
+
+    for (int i = 90; i > 40; i -= 7)
+    {
+        ajusterPWM(i, i);
+        attendre_ms(500);
+    }
+
+    attendre_ms(1500); //500 ms deja ecoules
+}
 
 void static inline w(void)
 {
@@ -46,4 +127,26 @@ int main()
     disp.put('b');
     disp << "wooooooow !!";
     w();
+    for (;;)
+    {
+        //Manoeuvre 1
+        manoeuvre1();
+
+        //Manoeuvre 2
+        manoeuvre2();
+
+        //Manoeuvre 3
+        manoeuvre3();
+
+        //Manoeuvre 4
+        manoeuvre4();
+
+        //Manoeuvre 5
+        manoeuvre5();
+
+        //Manoeuvre 6
+        manoeuvre6();
+    }
+
+    return 0;
 }
