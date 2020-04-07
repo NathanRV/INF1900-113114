@@ -19,6 +19,67 @@
 #include "antirebond.h"
 #include "lcm_so1602dtr_m_fw.h"
 #include "customprocs.h"
+
+/**
+ * Manoeuvre 1 (OK - OK - ATTN)
+ * Vitesse initiale : (90, 90).
+ * La vitesse de la roue gauche descend graduellement jusqu'à 52, à raison de -1 par 100 ms.
+ * À (52, 90), on laisse passer 1000 ms.
+ * La vitesse de la roue gauche remonte graduellement jusqu'à 90, à raison de +1 par 100 ms.
+ * À (90, 90), on laisse passer 2000 ms.
+ * Fin de la manoeuvre.
+ */
+void manoeuvre1()
+{
+    ajusterPWM(90, 90);
+
+    for (int i = 90; i > 51; i--)
+    {
+        ajusterPWM(90, i);
+        attendre_ms(100);
+    }
+
+    attendre_ms(900); //100 ms deja ecoules
+
+    for (int i = 52; i < 91; i++)
+    {
+        ajusterPWM(90, i);
+        attendre_ms(100);
+    }
+
+    attendre_ms(1900); //100 ms deja ecoules
+}
+
+/**
+ * Manoeuvre 2 (ATTN - OK - OK)
+ * Vitesse initiale : (90, 90).
+ * La vitesse de la roue droite descend graduellement jusqu'à 52, à raison de -1 par 100 ms.
+ * À (90, 52), on laisse passer 1000 ms.
+ * La vitesse de la roue droite remonte graduellement jusqu'à 90, à raison de +1 par 100 ms.
+ * À (90, 90), on laisse passer 2000 ms.
+ * Fin de la manoeuvre.
+ */
+void manoeuvre2()
+{
+    ajusterPWM(90, 90);
+
+    for (int i = 90; i > 51; i--)
+    {
+        ajusterPWM(i, 90);
+        attendre_ms(100);
+    }
+
+    attendre_ms(900); //100 ms deja ecoules
+
+    for (int i = 52; i < 91; i++)
+    {
+        ajusterPWM(i, 90);
+        attendre_ms(100);
+    }
+
+    attendre_ms(1900); //100 ms deja ecoules
+}
+
 /**
  * Manoeuvre 3 (OK - DNGR - DNGR)
  * Vitesse initiale : (-50, 50). On laisse passer 1000 ms.
