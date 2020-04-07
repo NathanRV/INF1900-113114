@@ -29,13 +29,13 @@ PROJECTNAME=test
 # Utilisez le suffixe .cpp pour les fichiers C++
 # Listez tous les fichiers a compiler, separes par
 # un espace. exemple: 'tp1.c tp2.cpp':
-PRJSRC= compteur32bits.cpp
+PRJSRC= projet.cpp
 
 # Inclusions additionnels (ex: -I/path/to/mydir)
-INC=
+INC=-I ../../tp/tp7/codeCommun/lib_c
 
 # Libraires a lier (ex: -lmylib)
-LIBS=
+LIBS=-L ../../tp/tp7/codeCommun/lib_c -l_c
 
 # Niveau d'optimization
 # Utilisez s (size opt), 1, 2, 3 ou 0 (off)

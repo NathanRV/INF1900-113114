@@ -59,6 +59,9 @@
 
 /**
  * Definition des constantes pour la direction des roues
+ * D7 D2
  */
- #define AVANCER     0b1010
- #define RECULER     0b1111
+ #define AVANCERDROITE     0b01
+ #define RECULERDROITE     0b10
+ #define AVANCERGAUCHE     0b0000010
+ #define RECULERGAUCHE     0b1000000

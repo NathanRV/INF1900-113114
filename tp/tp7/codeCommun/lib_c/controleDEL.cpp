@@ -25,6 +25,7 @@ void couleurAmbre(uint16_t duree)
         PORTB = COULEUR_VERT;
         attendre_ms(10);
     }
+	couleurEteint();
 }
 
 /**
@@ -37,6 +38,7 @@ void couleurVert(uint16_t duree)
 {
     PORTB = COULEUR_VERT;
     attendre_ms(duree);
+	couleurEteint();
 }
 
 /**
@@ -49,6 +51,7 @@ void couleurRouge(uint16_t duree)
 {
     PORTB = COULEUR_ROUGE;
     attendre_ms(duree);
+	couleurEteint();
 }
 
 /**
