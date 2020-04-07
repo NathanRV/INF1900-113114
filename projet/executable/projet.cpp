@@ -16,8 +16,8 @@
 #include "delay.h"
 #include "interactionUART.h"
 #include "antirebond.h"
-
-
+#include "lcm_so1602dtr_m_fw.h"
+#include "customprocs.h"
 /**
  * 
  *
@@ -25,8 +25,25 @@
  *
  */
 
+void static inline w(void)
+{
+    cp_wait_ms(2000);
+}
+
 int main()
 {
-	dirigerRoues(true,50);
 
+    initialiserDDRD(SORTIE);
+    initialiserDDRB(SORTIE);
+    PORTB = 0b01110000;
+    // for (;;)
+    // {
+    //     PORTD = 0b10000001;
+    // }
+
+    LCM disp(&DDRB, &PORTB);
+
+    disp.put('b');
+    disp << "wooooooow !!";
+    w();
 }
