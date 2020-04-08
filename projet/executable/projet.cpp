@@ -40,19 +40,15 @@ void manoeuvre1(LCM &disp)
     disp << "Manoeuvre 1";
     w();
 
-    ajusterPWM(90, 90);
-
-    for (int i = 90; i > 51; i--)
-    {
-        ajusterPWM(90, i);
+    for(int i = 90 ; i > 51 ; i--){
+        ajusterPWM(i, 90);
         attendre_ms(100);
     }
 
     attendre_ms(900); //100 ms deja ecoules
 
-    for (int i = 52; i < 91; i++)
-    {
-        ajusterPWM(90, i);
+    for(int i = 52 ; i < 91 ; i++){
+        ajusterPWM(i, 90);
         attendre_ms(100);
     }
 
@@ -74,17 +70,15 @@ void manoeuvre2(LCM &disp)
     disp << "Manoeuvre 2";
     w();
 
-    for (int i = 90; i > 51; i--)
-    {
-        ajusterPWM(i, 90);
+    for(int i = 90 ; i > 51 ; i--){
+        ajusterPWM(90, i);
         attendre_ms(100);
     }
 
     attendre_ms(900); //100 ms deja ecoules
 
-    for (int i = 52; i < 91; i++)
-    {
-        ajusterPWM(i, 90);
+    for(int i = 52 ; i < 91 ; i++){
+        ajusterPWM(90, i);
         attendre_ms(100);
     }
 
