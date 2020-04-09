@@ -8,6 +8,8 @@
 */
 #define F_CPU 8000000
 
+#include <stdio.h>
+#include <stdlib.h>
 #include "controleDEL.h"
 #include "controleMoteur.h"
 #include "capteurs.h"
@@ -19,6 +21,9 @@
 #include "antirebond.h"
 #include "lcm_so1602dtr_m_fw.h"
 #include "customprocs.h"
+
+#define sonar_out PORTB0
+#define sonar_in PINA0
 
 void static inline w(void)
 {
@@ -40,14 +45,16 @@ void manoeuvre1(LCM &disp)
     disp << "Manoeuvre 1";
     w();
 
-    for(int i = 90 ; i > 51 ; i--){
+    for (int i = 90; i > 51; i--)
+    {
         ajusterPWM(i, 90);
         attendre_ms(100);
     }
 
     attendre_ms(900); //100 ms deja ecoules
 
-    for(int i = 52 ; i < 91 ; i++){
+    for (int i = 52; i < 91; i++)
+    {
         ajusterPWM(i, 90);
         attendre_ms(100);
     }
@@ -70,14 +77,16 @@ void manoeuvre2(LCM &disp)
     disp << "Manoeuvre 2";
     w();
 
-    for(int i = 90 ; i > 51 ; i--){
+    for (int i = 90; i > 51; i--)
+    {
         ajusterPWM(90, i);
         attendre_ms(100);
     }
 
     attendre_ms(900); //100 ms deja ecoules
 
-    for(int i = 52 ; i < 91 ; i++){
+    for (int i = 52; i < 91; i++)
+    {
         ajusterPWM(90, i);
         attendre_ms(100);
     }
@@ -190,13 +199,38 @@ int main()
 
     initialiserDDRD(SORTIE);
     initialiserDDRB(SORTIE);
-    PORTB = 0b01110000;
-    // for (;;)
-    // {
-    //     PORTD = 0b10000001;
-    // }
-
+    initialiserDDRA(ENTREE);
     LCM disp(&DDRB, &PORTB);
+    /*
+        * Implementation test du sonar 
+    */
+    char sonarOutput[10];
+    double count = 0;
+    float distance;
+
+    TCCR1B |= (1 << CS11);
+
+    while (1)
+    {
+        disp.clear();
+        PORTB |= (1 << sonar_out);
+        _delay_us(10);
+        PORTB &= ~(1 << sonar_out);
+
+        TCNT1 = 0;
+
+        while (!(PINA & (1 << sonar_in)) && (TCNT1 < 58800))
+            ;
+        TCNT1 = 0;
+        while ((PINA & (1 << sonar_in)) && (TCNT1 < 58800))
+            ;
+        count = TCNT1;
+        distance = ((float)count / 5800);
+        dtostrf(distance, 3, 2, sonarOutput);
+        disp << sonarOutput;
+        w();
+        attendre_ms(1000);
+    }
 
     disp.put('b');
     disp << "wooooooow !!";
