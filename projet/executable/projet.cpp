@@ -194,6 +194,20 @@ void manoeuvre6(LCM &disp)
     disp.clear();
 }
 
+class Sonar
+{
+public:
+    //Selon la methode #1 du document.
+    void calculaterDistance(uint8_t sonarPort)
+    {
+        //Envoyer un signal de trigger
+        PORTB |= (1 << 0x01);
+    }
+
+private:
+    char *states;
+};
+
 int main()
 {
 
@@ -213,7 +227,7 @@ int main()
     while (1)
     {
         disp.clear();
-        PORTB |= (1 << sonar_out);
+        PORTB |= 0x01;
         _delay_us(10);
         PORTB &= ~(1 << sonar_out);
 
