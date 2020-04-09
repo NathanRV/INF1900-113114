@@ -6,6 +6,32 @@
                 Jefferson Lam,          1963528
     File name:  main.cpp
 */
+#define F_CPU 8000000
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "controleDEL.h"
+#include "controleMoteur.h"
+#include "capteurs.h"
+#include "can.h"
+#include "initialisation.h"
+#include "constantes.h"
+#include "delay.h"
+#include "interactionUART.h"
+#include "antirebond.h"
+#include "lcm_so1602dtr_m_fw.h"
+#include "customprocs.h"
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
+int8_t pDroite = 0;
+int8_t pGauche = 0;
+int8_t time = 1;
+
+
+#define sonar_out PORTB0
+#define sonar_in PINA0
+
 
 /**
 +---------------+-----------------+------------+----------+
@@ -41,32 +67,9 @@ enum Etats // Etats possibles
     MANOEUVRE5,
     MANOEUVRE6,
     MANOEUVREX
-}
+};
+Etats etatPresent = Etats::DETECTION;
 
-#define F_CPU 8000000
-
-#include <stdio.h>
-#include <stdlib.h>
-#include "controleDEL.h"
-#include "controleMoteur.h"
-#include "capteurs.h"
-#include "can.h"
-#include "initialisation.h"
-#include "constantes.h"
-#include "delay.h"
-#include "interactionUART.h"
-#include "antirebond.h"
-#include "lcm_so1602dtr_m_fw.h"
-#include "customprocs.h"
-#include <avr/io.h>
-#include <avr/interrupt.h>
-
-int8_t pDroite = 0;
-int8_t pGauche = 0;
-int8_t time = 1;
-
-#define sonar_out PORTB0
-#define sonar_in PINA0
 
 void static inline w(void)
 {
@@ -84,7 +87,7 @@ void static inline w(void)
  */
 void manoeuvre1(LCM &disp)
 {
-
+    disp.clear();
     disp << "Manoeuvre 1";
     w();
 
@@ -118,6 +121,7 @@ void manoeuvre1(LCM &disp)
  */
 void manoeuvre2(LCM &disp)
 {
+    disp.clear();
     disp << "Manoeuvre 2";
     w();
 
@@ -150,6 +154,7 @@ void manoeuvre2(LCM &disp)
  */
 void manoeuvre3(LCM &disp)
 {
+    disp.clear();
     disp << "Manoeuvre 3";
     w();
 
@@ -184,6 +189,7 @@ void manoeuvre3(LCM &disp)
  */
 void manoeuvre4(LCM &disp)
 {
+    disp.clear();
     disp << "Manoeuvre 4";
     w();
 
@@ -218,6 +224,7 @@ void manoeuvre4(LCM &disp)
  */
 void manoeuvre5(LCM &disp)
 {
+    disp.clear();
     disp << "Manoeuvre 5";
     w();
 
@@ -250,6 +257,7 @@ void manoeuvre5(LCM &disp)
  */
 void manoeuvre6(LCM &disp)
 {
+    disp.clear();
     disp << "Manoeuvre 6";
     w();
     pGauche = 90;
@@ -400,10 +408,19 @@ void affiche(uint8_t chiffre){
         break;
     }
 }
+
+void initialisationBouton(){
+    cli();
+    //Activer interruption bouton-poussoir
+    EIMSK |= (1 << INT1); 
+    EICRA |= (1 << ISC21);
+    sei();
+}
+
 int main()
 {
     LCM disp(&DDRB, &PORTB);
-    Etats etatPresent = Etats::DETECTION;
+    double count;
 
     for (;;)
     {
@@ -411,46 +428,44 @@ int main()
         {
         case Etats::DETECTION:
             initialiserDDR(ENTREE, SORTIE, ENTREE, ENTREE);
+            initialisationBouton();
 
             /**
              * Les oscilloscopes ne doivent pas recevoir de signaux, 
              * les DEL et les afficheurs 7 segments doivent être éteints.
              */
 
-            for(;;){ //4 tours de boucle/seconde 1 tour = 0,25s
-                //Detecter présence d'obstacles à gauche, devant, droite
-                /*
-                * Implementation test du sonar 
-                */
-                char sonarOutput[10];
-                double count = 0;
-                float distance;
+             //4 tours de boucle/seconde 1 tour = 0,25s
+            //Detecter présence d'obstacles à gauche, devant, droite
+            /*
+            * Implementation test du sonar 
+            */
+            char sonarOutput[10];
+            count = 0;
+            float distance;
 
-                TCCR1B |= (1 << CS11);
-                disp.clear();
-                PORTB |= 0x01;
-                _delay_us(10);
-                PORTB &= ~(1 << sonar_out);
+            TCCR1B |= (1 << CS11);
+            disp.clear();
+            PORTB |= 0x01;
+            _delay_us(10);
+            PORTB &= ~(1 << sonar_out);
 
-                TCNT1 = 0;
+            TCNT1 = 0;
 
-                while (!(PINA & (1 << sonar_in)) && (TCNT1 < 58800))
-                    ;
-                TCNT1 = 0;
-                while ((PINA & (1 << sonar_in)) && (TCNT1 < 58800))
-                    ;
-                count = TCNT1;
-                distance = ((float)count / 5800);
-                dtostrf(distance, 3, 2, sonarOutput);
-                disp << sonarOutput;
-                w();
-                attendre_ms(1000);                
-                //Afficher distance et catégorie selon format                
+            while (!(PINA & (1 << sonar_in)) && (TCNT1 < 58800))
+                ;
+            TCNT1 = 0;
+            while ((PINA & (1 << sonar_in)) && (TCNT1 < 58800))
+                ;
+            count = TCNT1;
+            distance = ((float)count / 5800);
+            dtostrf(distance, 3, 2, sonarOutput);
+            disp << sonarOutput;
+            w();
+            attendre_ms(1000);                
+            //Afficher distance et catégorie selon format                
 
-                //Bouton-poussoir change mode manoeuvre si utilisateur satisfait
-
-            }
-
+            //Bouton-poussoir change mode manoeuvre si utilisateur satisfait
             break;
 
         case Etats::MANOEUVRE1:
@@ -508,12 +523,14 @@ int main()
             break;
 
         case Etats::MANOEUVREX:
+            disp.clear();
             disp << "Combinaison non evaluee";
             attendre_ms(2000);
             etatPresent = DETECTION;
             break;
+        }
     }
-
+    
     return 0;
 }
 
@@ -570,4 +587,9 @@ ISR(TIMER2_COMPB_vect){
         break;
     }
     time ++;
+}
+
+
+ISR(INT1_vect){
+    etatPresent = MANOEUVRE1;
 }
