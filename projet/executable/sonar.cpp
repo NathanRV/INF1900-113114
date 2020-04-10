@@ -28,11 +28,11 @@ void Sonar::detecterObjets() {
     distanceSonar1 = calculerDistance(PINA0);
     distanceSonar2 = calculerDistance(PINA1);
     distanceSonar3 = calculerDistance(PINA2);
+    afficherMesures();
 }
 
 void Sonar::afficherMesures() {
     char sonarOutput1[10], sonarOutput2[10], sonarOutput3[10];
-    detecterObjets();    
     dtostrf(distanceSonar1, 3, 1, sonarOutput1);
     dtostrf(distanceSonar2, 3, 1, sonarOutput2);
     dtostrf(distanceSonar3, 3, 1, sonarOutput3);

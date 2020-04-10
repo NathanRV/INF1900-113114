@@ -204,7 +204,7 @@ int main()
 
     while (1)
     {
-        sonar.afficherMesures();
+        sonar.detecterObjets();
     }
 
 
