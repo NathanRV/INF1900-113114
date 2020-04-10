@@ -100,7 +100,7 @@ void initialisationInterruption(uint8_t etatA, uint8_t etatB, uint8_t etatC, uin
 
     // cette procédure ajuste le registre EIMSK
     // de l’ATmega324PA pour permettre les interruptions externes
-    EIMSK |= (1 << INT0);
+    //EIMSK |= (1 << INT0);
 
     // il faut sensibiliser les interruptions externes aux
     // changements de niveau du bouton-poussoir

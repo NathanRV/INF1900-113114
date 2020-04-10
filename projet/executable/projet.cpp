@@ -21,7 +21,56 @@
 #include "antirebond.h"
 #include "lcm_so1602dtr_m_fw.h"
 #include "customprocs.h"
+#include <avr/io.h>
+#include <avr/interrupt.h>
 #include "sonar.h"
+
+int8_t pDroite = 0;
+int8_t pGauche = 0;
+int8_t time = 1;
+
+
+#define sonar_out PORTB0
+#define sonar_in PINA0
+
+
+/**
++---------------+-----------------+------------+----------+
+| Current State | Input           | Next State | Output   |
++===============+=================+============+==========+
+| DETECTION     | Bouton poussoir | MANOEUVRE  | Multiple |
++---------------+-----------------+------------+----------+
+| MANOEUVRE1    | None            | DETECTION  | Multiple |
++---------------+-----------------+------------+----------+
+| MANOEUVRE2    | None            | DETECTION  | Multiple |
++---------------+-----------------+------------+----------+
+| MANOEUVRE3    | None            | DETECTION  | Multiple |
++---------------+-----------------+------------+----------+
+| MANOEUVRE4    | None            | DETECTION  | Multiple |
++---------------+-----------------+------------+----------+
+| MANOEUVRE5    | None            | DETECTION  | Multiple |
++---------------+-----------------+------------+----------+
+| MANOEUVRE6    | None            | DETECTION  | Multiple |
++---------------+-----------------+------------+----------+
+| MANOEUVREX    | None            | DETECTION  | Multiple |
++---------------+-----------------+------------+----------+
+ * 
+ * 
+ */
+
+enum Etats // Etats possibles
+{
+    DETECTION = 0,
+    MANOEUVRE1,
+    MANOEUVRE2,
+    MANOEUVRE3,
+    MANOEUVRE4,
+    MANOEUVRE5,
+    MANOEUVRE6,
+    MANOEUVREX
+};
+Etats etatPresent = Etats::DETECTION;
+
 
 void static inline w(void)
 {
@@ -39,21 +88,22 @@ void static inline w(void)
  */
 void manoeuvre1(LCM &disp)
 {
-
+    disp.clear();
     disp << "Manoeuvre 1";
     w();
 
-    for (int i = 90; i > 51; i--)
-    {
-        ajusterPWM(i, 90);
+    for(int i = 90 ; i > 51 ; i--){
+        pGauche = i;
+        pDroite = 90;
+        ajusterPWM(pGauche,pDroite);
         attendre_ms(100);
     }
 
     attendre_ms(900); //100 ms deja ecoules
 
-    for (int i = 52; i < 91; i++)
-    {
-        ajusterPWM(i, 90);
+    for(int i = 52 ; i < 91 ; i++){
+        pGauche = i;
+        ajusterPWM(pGauche,pDroite);
         attendre_ms(100);
     }
 
@@ -72,20 +122,22 @@ void manoeuvre1(LCM &disp)
  */
 void manoeuvre2(LCM &disp)
 {
+    disp.clear();
     disp << "Manoeuvre 2";
     w();
 
-    for (int i = 90; i > 51; i--)
-    {
-        ajusterPWM(90, i);
+    for(int i = 90 ; i > 51 ; i--){
+        pGauche = 90;
+        pDroite = i;
+        ajusterPWM(pGauche,pDroite);
         attendre_ms(100);
     }
 
     attendre_ms(900); //100 ms deja ecoules
 
-    for (int i = 52; i < 91; i++)
-    {
-        ajusterPWM(90, i);
+    for(int i = 52 ; i < 91 ; i++){
+        pDroite = i;
+        ajusterPWM(pGauche,pDroite);
         attendre_ms(100);
     }
 
@@ -103,18 +155,28 @@ void manoeuvre2(LCM &disp)
  */
 void manoeuvre3(LCM &disp)
 {
+    disp.clear();
     disp << "Manoeuvre 3";
     w();
-    ajusterPWM(-50, 50);
+
+    pGauche = -50;
+    pDroite = 50;
+    ajusterPWM(pGauche,pDroite);
     attendre_ms(1000);
 
-    ajusterPWM(66, 66);
+    pGauche = 66;
+    pDroite = 66;
+    ajusterPWM(pGauche,pDroite);
     attendre_ms(2000);
 
-    ajusterPWM(50, -50);
+    pGauche = 50;
+    pDroite = -50;
+    ajusterPWM(pGauche,pDroite);
     attendre_ms(1000);
 
-    ajusterPWM(78, 78);
+    pGauche = 78;
+    pDroite = 78;
+    ajusterPWM(pGauche,pDroite);
     attendre_ms(2000);
     disp.clear();
 }
@@ -128,18 +190,28 @@ void manoeuvre3(LCM &disp)
  */
 void manoeuvre4(LCM &disp)
 {
+    disp.clear();
     disp << "Manoeuvre 4";
     w();
-    ajusterPWM(50, -50);
+
+    pGauche = 50;
+    pDroite = -50;
+    ajusterPWM(pGauche,pDroite);
     attendre_ms(1000);
 
-    ajusterPWM(66, 66);
+    pGauche = 66;
+    pDroite = 66;
+    ajusterPWM(pGauche,pDroite);
     attendre_ms(2000);
 
-    ajusterPWM(-50, 50);
+    pGauche = -50;
+    pDroite = 50;
+    ajusterPWM(pGauche,pDroite);
     attendre_ms(1000);
 
-    ajusterPWM(78, 78);
+    pGauche = 78;
+    pDroite = 78;
+    ajusterPWM(pGauche,pDroite);
     attendre_ms(2000);
     disp.clear();
 }
@@ -153,16 +225,24 @@ void manoeuvre4(LCM &disp)
  */
 void manoeuvre5(LCM &disp)
 {
+    disp.clear();
     disp << "Manoeuvre 5";
     w();
-    ajusterPWM(50, -50);
+
+    pGauche = 50;
+    pDroite = -50;
+    ajusterPWM(pGauche,pDroite);
     attendre_ms(2000);
 
-    ajusterPWM(0, 0);
+    pGauche = 0;
+    pDroite = 0;
+    ajusterPWM(pGauche,pDroite);
 
     for (int i = 0; i < 64; i += 3)
     {
-        ajusterPWM(i, i);
+        pGauche = i;
+        pDroite = i;
+        ajusterPWM(pGauche,pDroite);
         attendre_ms(125);
     }
 
@@ -178,13 +258,18 @@ void manoeuvre5(LCM &disp)
  */
 void manoeuvre6(LCM &disp)
 {
+    disp.clear();
     disp << "Manoeuvre 6";
     w();
-    ajusterPWM(90, 90);
+    pGauche = 90;
+    pDroite = 90;
+    ajusterPWM(pGauche,pDroite);
 
     for (int i = 90; i > 40; i -= 7)
     {
-        ajusterPWM(i, i);
+        pGauche = i;
+        pDroite = i;
+        ajusterPWM(pGauche,pDroite);
         attendre_ms(500);
     }
 
@@ -192,44 +277,264 @@ void manoeuvre6(LCM &disp)
     disp.clear();
 }
 
+/** 
+ * Fonction permettant d'allumer la minuterie qui gere les afficheurs
+ * @return void
+*/
+void minuterieAfficheur(uint8_t valeur){
+	TCNT2 = 0; //compteur à 0
+
+	//f=fréquence, N=facteur de prescaler
+	//fOCnA=fclk/2N(1+OCRnX)
+
+    // mise à un des sorties OC1A et OC1B sur comparaison
+    // réussie en mode PWM 8 bits, phase correcte
+    // et valeur de TOP fixe à 0xFF (mode #1 de la table 17-6
+    // page 177 de la description technique du ATmega324PA)
+    
+    //OCR2B = valeur;
+    //Output compare Register 1B correspond à D6 (OC2B)
+    
+    // division d'horloge par 8 - implique une frequence de PWM fixe
+
+    //Voir p.152
+    //TCCR2A |= (1 << WGM21) | (1 << COM2B1); //Table 16-4.
+    //  COMnB0:Clear OCnB on Compare Match
+    //  WGMn0:PWM, phase correct, 8-bit
+    TCCR2B |= (1 << CS20) | (1 << CS21) ; 
+    //max prescaler of 32
+
+    //Interruption comparaison OCIE2B
+    TIMSK2 |= (1 << OCIE2B);
+}
+
+void afficheTrait(){
+    PORTC = 0b00000010;
+    //changer pour constantes trait
+}
+
+void activerAfficheur(){
+    initialiserDDRA(SORTIE);
+    initialiserDDRC(SORTIE);
+    PORTA = 0b01111111;
+}
+
+void changerAfficheur(){
+    PORTA = PINA * 2;
+    PORTA ++;
+    if(PINA == 0xFF){
+        PORTA = 0b11110111; 
+        //afficheur 1
+    }
+}
+
+void affiche(uint8_t chiffre){
+    switch (chiffre)
+    {
+    case 0:
+        PORTC = 0b11111100;
+        break;
+
+    case 1:
+        PORTC = 0b01100000;
+        break;
+
+    case 2:
+        PORTC = 0b11011010;
+        break;
+
+    case 3:
+        PORTC = 0b11110010;
+        break;
+
+    case 4:
+        PORTC = 0b01100110; 
+        break;
+
+    case 5:
+        PORTC = 0b10110110;
+        break;
+        
+    case 6:
+        PORTC = 0b10111110;
+        break;
+
+    case 7:
+        PORTC = 0b11100000;
+        break;
+        
+    case 8:
+        PORTC = 0b11111110;
+        break;
+
+    case 9:
+        PORTC = 0b11110110;
+        break;
+    
+    default:
+        break;
+    }
+}
+
+void initialisationBouton(){
+    cli();
+    //Activer interruption bouton-poussoir
+    EIMSK |= (1 << INT1); 
+    EICRA |= (1 << ISC21);
+    sei();
+}
+
+
 int main()
 {
-
-    initialiserDDRD(SORTIE);
-    initialiserDDRB(SORTIE);
-    initialiserDDRA(ENTREE);
     LCM disp(&DDRB, &PORTB);
     Sonar sonar;
 
-    // while (1)
-    // {
-    //     sonar.detecterObjets();
-    // }
-
-    disp.put('b');
-    disp << "wooooooow !!";
-    w();
-    disp.clear();
     for (;;)
     {
-        //Manoeuvre 1
-        manoeuvre1(disp);
+        switch (etatPresent)
+        {
+        case Etats::DETECTION:
+            initialiserDDR(ENTREE, SORTIE, ENTREE, ENTREE);
+            initialisationBouton();
 
-        //Manoeuvre 2
-        manoeuvre2(disp);
+            /**
+             * Les oscilloscopes ne doivent pas recevoir de signaux, 
+             * les DEL et les afficheurs 7 segments doivent être éteints.
+             */
 
-        //Manoeuvre 3
-        manoeuvre3(disp);
+            //4 tours de boucle/seconde 1 tour = 0,25s
+            while (1)
+            {
+                sonar.calculerDistance(PINA1);
+            }
+            //Afficher distance et catégorie selon format                
 
-        //Manoeuvre 4
-        manoeuvre4(disp);
+            //Bouton-poussoir change mode manoeuvre si utilisateur satisfait
+            break;
 
-        //Manoeuvre 5
-        manoeuvre5(disp);
+        case Etats::MANOEUVRE1:
+            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
+            activerAfficheur();
+            minuterieAfficheur(0);
+            //Manoeuvre 1
+            manoeuvre1(disp);
+            etatPresent = DETECTION;
+            break;
 
-        //Manoeuvre 6
-        manoeuvre6(disp);
+        case Etats::MANOEUVRE2:
+            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
+            activerAfficheur();
+            minuterieAfficheur(0);
+            //Manoeuvre 2
+            manoeuvre2(disp);
+            etatPresent = DETECTION;
+            break;
+
+        case Etats::MANOEUVRE3:
+            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
+            activerAfficheur();
+            minuterieAfficheur(0);
+            //Manoeuvre 3
+            manoeuvre3(disp);
+            etatPresent = DETECTION;
+            break;
+
+        case Etats::MANOEUVRE4:
+            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
+            activerAfficheur();
+            minuterieAfficheur(0);
+            //Manoeuvre 4
+            manoeuvre4(disp);
+            etatPresent = DETECTION;
+            break;
+
+        case Etats::MANOEUVRE5:
+            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
+            activerAfficheur();
+            minuterieAfficheur(0);
+            //Manoeuvre 5
+            manoeuvre5(disp);
+            etatPresent = DETECTION;
+            break;
+
+        case Etats::MANOEUVRE6:
+            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
+            activerAfficheur();
+            minuterieAfficheur(0);
+            //Manoeuvre 6
+            manoeuvre6(disp);
+            etatPresent = DETECTION;
+            break;
+
+        case Etats::MANOEUVREX:
+            disp.clear();
+            disp << "Combinaison non evaluee";
+            attendre_ms(2000);
+            etatPresent = DETECTION;
+            break;
+        }
     }
-
+    
     return 0;
+}
+
+ISR(TIMER2_COMPB_vect){
+    uint8_t gauche;
+    uint8_t droite;
+    
+    if(pGauche < 0)
+        gauche = -pGauche;
+    else
+        gauche = pGauche;
+    
+    
+    if(pDroite < 0)
+        droite = -pDroite;
+    else
+        droite = pDroite;
+
+
+    uint8_t gaucheUnite = gauche % 10;
+    uint8_t gaucheDiz = (gauche - gaucheUnite)/10;
+    uint8_t droiteUnite = droite % 10;
+    uint8_t droiteDiz = (droite - droiteUnite)/10;
+    
+    switch (time)
+    {
+    case 1:
+        changerAfficheur();
+        affiche(gaucheDiz);
+        break;
+    
+    case 2:
+        changerAfficheur();
+        affiche(gaucheUnite);
+        break;
+
+    case 3:
+        changerAfficheur();
+        afficheTrait();
+        break;
+
+    case 4:
+        changerAfficheur();
+        affiche(droiteDiz);
+        break;
+
+    case 5:
+        changerAfficheur();
+        affiche(droiteUnite);
+        time = 0;
+        break;
+
+    default:
+        break;
+    }
+    time ++;
+}
+
+
+ISR(INT1_vect){
+    etatPresent = MANOEUVRE1;
 }
