@@ -82,7 +82,7 @@ CFLAGS=-I. -I/usr/include/simavr  -MMD $(INC) -g -mmcu=$(MCU) -O$(OPTLEVEL) \
 	-Wall                                        
 
 # Flags pour le compilateur en C++
-CXXFLAGS=-fno-exceptions     
+CXXFLAGS=-fno-exceptions    
 
 # Linker pour lier les librairies utilisees
 LDFLAGS=-Wl,-Map,$(TRG).map -mmcu=$(MCU)

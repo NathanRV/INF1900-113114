@@ -5,13 +5,14 @@
 #include <avr/interrupt.h>
 #include "lcm_so1602dtr_m_fw.h"
 #include "customprocs.h"
+#include "sonar.h"
 
 class Robot
 {
 public:
-
     Robot() : disp(&DDRB, &PORTB)
-    {}
+    {
+    }
 
     /**
      * Manoeuvre 1 (OK - OK - ATTN)
@@ -34,7 +35,6 @@ public:
      * Fin de la manoeuvre.
      */
     void manoeuvre2();
-
 
     /**
      * Manoeuvre 3 (OK - DNGR - DNGR)
@@ -79,13 +79,11 @@ public:
      */
     void minuterieAfficheur(uint8_t valeur);
 
-
     /**
      * Fonction qui affiche un trait sur
      * afficheur 7 segments
      */
     void afficheTrait();
-
 
     /**
      * Fonction qui initialise les ports
@@ -93,12 +91,10 @@ public:
      */
     void activerAfficheur();
 
-
     /**
      * Fonction qui change au prochain afficheur
      */
     void changerAfficheur();
-
 
     /**
      * Fonction qui affiche le chiffre passee en parametre
