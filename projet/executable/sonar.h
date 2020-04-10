@@ -21,7 +21,7 @@ public:
     * 
     * @param in:
     */
-    void calculerDistance(uint8_t sonarPort);
+    float calculerDistance(uint8_t sonarPort);
 
     /*
     * Méthode qui permet d'activer tous les trois sonars

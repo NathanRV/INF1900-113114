@@ -23,8 +23,6 @@
 #include "customprocs.h"
 #include "sonar.h"
 
-#define sonar_out PORTB0
-#define sonar_in PINA0
 
 void static inline w(void)
 {
@@ -206,39 +204,9 @@ int main()
 
     while (1)
     {
-        sonar.calculerDistance(PINA1);
+        sonar.afficherMesures();
     }
 
-    // /*
-    //     * Implementation test du sonar
-    // */
-    // char sonarOutput[10];
-    // double count = 0;
-    // float distance;
-
-    // TCCR1B |= (1 << CS11); //pre-scaler : 8
-
-    // while (1)
-    // {
-    //     disp.clear();
-    //     PORTB |= 0x01;
-    //     _delay_us(10);
-    //     PORTB &= ~(1 << sonar_out);
-
-    //     TCNT1 = 0;
-
-    //     while (!(PINA & (1 << sonar_in)))
-    //         ;
-    //     TCNT1 = 0;
-    //     while ((PINA & (1 << sonar_in)))
-    //         ;
-    //     count = TCNT1;
-    //     distance = ((float)count / 5800);
-    //     dtostrf(distance, 3, 2, sonarOutput);
-    //     disp << sonarOutput;
-    //     w();
-    //     attendre_ms(1000);
-    // }
 
     disp.put('b');
     disp << "wooooooow !!";
