@@ -84,10 +84,23 @@ void ajusterPWM( int8_t pourcentageGauche, int8_t pourcentageDroite ) {
 }
 
 /**
+ * Fonction permettant d'arreter le comptage
+ * @return void
+*/
+void arretPWM(){
+    OCR1A = 0; 
+    OCR1B = 0;
+    TCCR1A = 0;
+}
+
+/**
  * Fonction permettant d'ajuster l'intensite du
  * PWM genere par les interruptions à 0.
  * @return void
  */
 void arreterMoteur () {
     ajusterPWM(0, 0);
+    arretPWM();
 }
+
+

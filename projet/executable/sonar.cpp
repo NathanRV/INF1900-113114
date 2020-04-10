@@ -1,10 +1,16 @@
 #include "sonar.h"
 
+Sonar::Sonar(LCM *display) : disp(display)
+{
+    //set pre-scaler
+    TCCR1B |= (1 << CS11);
+}
+
 float Sonar::calculerDistance(uint8_t sonarPort)
 {
     float count = 0;
     
-    PORTB |= 0x01; //Activater Trigger (PINB0)
+    PORTB |= 0x01; //Activer Trigger (PINB0)
     attendre_ms(10);
     PORTB &= ~(1 << PORTB0);
 
@@ -36,34 +42,35 @@ void Sonar::afficherMesures() {
     dtostrf(distanceSonar1, 3, 1, sonarOutput1);
     dtostrf(distanceSonar2, 3, 1, sonarOutput2);
     dtostrf(distanceSonar3, 3, 1, sonarOutput3);
-    disp << sonarOutput1 << "m";
-    disp.write(sonarOutput2, 6, false);
-    disp.put('m');
-    disp.write(sonarOutput3, 12, false);
-    disp.put('m');
+    disp->write(sonarOutput1, 0, false);
+    disp->put('m');
+    disp->write(sonarOutput2, 6, false);
+    disp->put('m');
+    disp->write(sonarOutput3, 12, false);
+    disp->put('m');
 
     if (distanceSonar1 < 1) {
-        disp.write("DNGR", LCM_FW_HALF_CH, false);
+        disp->write("DNGR", LCM_FW_HALF_CH, false);
     } else if (distanceSonar1 >= 1 && distanceSonar1 < 3) {
-        disp.write("ATTN", LCM_FW_HALF_CH, false);
+        disp->write("ATTN", LCM_FW_HALF_CH, false);
     } else {
-        disp.write(" OK ", LCM_FW_HALF_CH, false);
+        disp->write(" OK ", LCM_FW_HALF_CH, false);
     }
 
     if (distanceSonar2 < 1) {
-        disp.write("DNGR", LCM_FW_HALF_CH + 6, false);
+        disp->write("DNGR", LCM_FW_HALF_CH + 6, false);
     } else if (distanceSonar2 >= 1 && distanceSonar2 < 3) {
-        disp.write("ATTN", LCM_FW_HALF_CH + 6, false);
+        disp->write("ATTN", LCM_FW_HALF_CH + 6, false);
     } else {
-        disp.write(" OK ", LCM_FW_HALF_CH + 6, false);
+        disp->write(" OK ", LCM_FW_HALF_CH + 6, false);
     }
 
     if (distanceSonar3 < 1) {
-        disp.write("DNGR", LCM_FW_HALF_CH + 12, false);
+        disp->write("DNGR", LCM_FW_HALF_CH + 12, false);
     } else if (distanceSonar3 >= 1 && distanceSonar3 < 3) {
-        disp.write("ATTN", LCM_FW_HALF_CH + 12, false);
+        disp->write("ATTN", LCM_FW_HALF_CH + 12, false);
     } else {
-        disp.write(" OK ", LCM_FW_HALF_CH + 12, false);
+        disp->write(" OK ", LCM_FW_HALF_CH + 12, false);
     }
 
 }

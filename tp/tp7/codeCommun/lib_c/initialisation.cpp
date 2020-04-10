@@ -15,6 +15,7 @@
  * @return void
  */
 void initialiserDDRA(uint8_t etat) {
+    DDRA = 0;
     DDRA = etat;
 }
 
@@ -24,6 +25,7 @@ void initialiserDDRA(uint8_t etat) {
  * @return void
  */
 void initialiserDDRB(uint8_t etat) {
+    DDRB = 0;
     DDRB = etat;
 }
 
@@ -33,6 +35,7 @@ void initialiserDDRB(uint8_t etat) {
  * @return void
  */
 void initialiserDDRC(uint8_t etat) {
+    DDRC = 0;
     DDRC = etat;
 }
 
@@ -42,6 +45,7 @@ void initialiserDDRC(uint8_t etat) {
  * @return void
  */
 void initialiserDDRD(uint8_t etat) {
+    DDRD = 0;
     DDRD = etat;
 }
 

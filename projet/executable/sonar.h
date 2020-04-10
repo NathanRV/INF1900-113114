@@ -9,11 +9,7 @@
 class Sonar
 {
 public:
-    Sonar() : disp(&DDRB, &PORTB)
-    {
-        //set pre-scaler
-        TCCR1B |= (1 << CS11);
-    }
+    Sonar(LCM *display);
 
     /*
     * Methode qui envoie un signal "trigger" pour enclencher un signal au sonar
@@ -37,5 +33,5 @@ public:
 
 private:
     float distanceSonar1, distanceSonar2, distanceSonar3;
-    LCM disp;
+    LCM *disp;
 };

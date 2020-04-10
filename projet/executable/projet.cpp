@@ -108,6 +108,7 @@ void manoeuvre1(LCM &disp)
     }
 
     attendre_ms(1900); //100 ms deja ecoules
+    arreterMoteur();
     disp.clear();
 }
 
@@ -388,7 +389,8 @@ void initialisationBouton(){
 int main()
 {
     LCM disp(&DDRB, &PORTB);
-    Sonar sonar;
+    Sonar sonar = Sonar(&disp);
+    initialisationBouton();
 
     for (;;)
     {
@@ -396,14 +398,14 @@ int main()
         {
         case Etats::DETECTION:
             initialiserDDR(ENTREE, SORTIE, ENTREE, ENTREE);
-            initialisationBouton();
             /**
              * Les oscilloscopes ne doivent pas recevoir de signaux, 
              * les DEL et les afficheurs 7 segments doivent être éteints.
              */
             //4 tours de boucle/seconde 1 tour = 0,25s
             //Afficher distance et catégorie selon format 
-            sonar.detecterObjets();               
+            sonar.detecterObjets();   
+            attendre_ms(250);
 
             //Bouton-poussoir change mode manoeuvre si utilisateur satisfait
             break;
