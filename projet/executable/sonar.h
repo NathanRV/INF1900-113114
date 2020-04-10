@@ -19,21 +19,19 @@ public:
     * Methode qui envoie un signal "trigger" pour enclencher un signal au sonar
     * qui calcule la distance entre le sonar et l'objet
     * 
-    * @param in:
+    * @param in: sonarPort le pin spécifique du port A connecté au sonar voulu
+    * @param out: la distance entre le sonar et l'objet
     */
     float calculerDistance(uint8_t sonarPort);
 
     /*
-    * Méthode qui permet d'activer tous les trois sonars
-    *  
-    * 
+    * Méthode qui permet l'activation des trois sonars et qui met a jour les 
+    * les distances detectes 
     */
     void detecterObjets();
 
     /*
     * Affiche les trois mesures de distances
-    * 
-    * 
     */
     void afficherMesures();
 
