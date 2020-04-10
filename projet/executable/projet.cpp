@@ -23,7 +23,6 @@
 #include "customprocs.h"
 #include "sonar.h"
 
-
 void static inline w(void)
 {
     cp_wait_ms(2000);
@@ -202,11 +201,10 @@ int main()
     LCM disp(&DDRB, &PORTB);
     Sonar sonar;
 
-    while (1)
-    {
-        sonar.detecterObjets();
-    }
-
+    // while (1)
+    // {
+    //     sonar.detecterObjets();
+    // }
 
     disp.put('b');
     disp << "wooooooow !!";
