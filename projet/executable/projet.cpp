@@ -397,18 +397,13 @@ int main()
         case Etats::DETECTION:
             initialiserDDR(ENTREE, SORTIE, ENTREE, ENTREE);
             initialisationBouton();
-
             /**
              * Les oscilloscopes ne doivent pas recevoir de signaux, 
              * les DEL et les afficheurs 7 segments doivent être éteints.
              */
-
             //4 tours de boucle/seconde 1 tour = 0,25s
-            while (1)
-            {
-                sonar.calculerDistance(PINA1);
-            }
-            //Afficher distance et catégorie selon format                
+            //Afficher distance et catégorie selon format 
+            sonar.detecterObjets();               
 
             //Bouton-poussoir change mode manoeuvre si utilisateur satisfait
             break;

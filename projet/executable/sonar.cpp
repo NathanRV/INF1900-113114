@@ -47,7 +47,7 @@ void Sonar::afficherMesures() {
     } else if (distanceSonar1 >= 1 && distanceSonar1 < 3) {
         disp.write("ATTN", LCM_FW_HALF_CH, false);
     } else {
-        disp.write(" OK", LCM_FW_HALF_CH, false);
+        disp.write(" OK ", LCM_FW_HALF_CH, false);
     }
 
     if (distanceSonar2 < 1) {
@@ -55,7 +55,7 @@ void Sonar::afficherMesures() {
     } else if (distanceSonar2 >= 1 && distanceSonar2 < 3) {
         disp.write("ATTN", LCM_FW_HALF_CH + 6, false);
     } else {
-        disp.write(" OK", LCM_FW_HALF_CH + 6, false);
+        disp.write(" OK ", LCM_FW_HALF_CH + 6, false);
     }
 
     if (distanceSonar3 < 1) {
@@ -63,10 +63,7 @@ void Sonar::afficherMesures() {
     } else if (distanceSonar3 >= 1 && distanceSonar3 < 3) {
         disp.write("ATTN", LCM_FW_HALF_CH + 12, false);
     } else {
-        disp.write(" OK", LCM_FW_HALF_CH + 12, false);
+        disp.write(" OK ", LCM_FW_HALF_CH + 12, false);
     }
-
-    attendre_ms(2000);
-    disp.clear();
 
 }
