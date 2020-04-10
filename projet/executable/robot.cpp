@@ -1,77 +1,5 @@
-/*
-    Date:       9-03-2020
-    Authors:    David Saikali,          2015144
-                Nathan Ramsay-Vejlens,  1989944
-                Agnes Sam Yue Chi,      1954192
-                Jefferson Lam,          1963528
-    File name:  main.cpp
-*/
-#define F_CPU 8000000
+#include "robot.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "controleDEL.h"
-#include "controleMoteur.h"
-#include "capteurs.h"
-#include "can.h"
-#include "initialisation.h"
-#include "constantes.h"
-#include "delay.h"
-#include "interactionUART.h"
-#include "antirebond.h"
-#include "lcm_so1602dtr_m_fw.h"
-#include "customprocs.h"
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include "sonar.h"
-
-#define sonar_out PORTB0
-#define sonar_in PINA0
-
-
-/**
-+---------------+-----------------+------------+----------+
-| Current State | Input           | Next State | Output   |
-+===============+=================+============+==========+
-| DETECTION     | Bouton poussoir | MANOEUVRE  | Multiple |
-+---------------+-----------------+------------+----------+
-| MANOEUVRE1    | None            | DETECTION  | Multiple |
-+---------------+-----------------+------------+----------+
-| MANOEUVRE2    | None            | DETECTION  | Multiple |
-+---------------+-----------------+------------+----------+
-| MANOEUVRE3    | None            | DETECTION  | Multiple |
-+---------------+-----------------+------------+----------+
-| MANOEUVRE4    | None            | DETECTION  | Multiple |
-+---------------+-----------------+------------+----------+
-| MANOEUVRE5    | None            | DETECTION  | Multiple |
-+---------------+-----------------+------------+----------+
-| MANOEUVRE6    | None            | DETECTION  | Multiple |
-+---------------+-----------------+------------+----------+
-| MANOEUVREX    | None            | DETECTION  | Multiple |
-+---------------+-----------------+------------+----------+
- * 
- * 
- */
-
-enum Etats // Etats possibles
-{
-    DETECTION = 0,
-    MANOEUVRE1,
-    MANOEUVRE2,
-    MANOEUVRE3,
-    MANOEUVRE4,
-    MANOEUVRE5,
-    MANOEUVRE6,
-    MANOEUVREX
-};
-
-//Variables Globales
-Etats etatPresent = Etats::DETECTION;
-LCM disp(&DDRB, &PORTB);
-Sonar sonar;
-int8_t pDroite = 0;
-int8_t pGauche = 0;
-int8_t afficheur = 1;
 
 void static inline w(void)
 {
@@ -87,7 +15,7 @@ void static inline w(void)
  * À (90, 90), on laisse passer 2000 ms.
  * Fin de la manoeuvre.
  */
-void manoeuvre1(LCM &disp)
+void Robot::manoeuvre1()
 {
     disp.clear();
     disp << "Manoeuvre 1";
@@ -122,7 +50,7 @@ void manoeuvre1(LCM &disp)
  * À (90, 90), on laisse passer 2000 ms.
  * Fin de la manoeuvre.
  */
-void manoeuvre2(LCM &disp)
+void Robot::manoeuvre2()
 {
     disp.clear();
     disp << "Manoeuvre 2";
@@ -156,7 +84,7 @@ void manoeuvre2(LCM &disp)
  * On change la vitesse pour (78, 78) et on laisse passer 2000 ms.
  * Fin de la manoeuvre.
  */
-void manoeuvre3(LCM &disp)
+void Robot::manoeuvre3()
 {
     disp.clear();
     disp << "Manoeuvre 3";
@@ -185,14 +113,15 @@ void manoeuvre3(LCM &disp)
     disp.clear();
 }
 
-/** Manoeuvre 4 (DNGR - DNGR - OK)
+/** 
+ * Manoeuvre 4 (DNGR - DNGR - OK)
  * Vitesse initiale : (50, -50). On laisse passer 1000 ms.
  * On change la vitesse pour (66, 66) et on laisse passer 2000 ms.
  * On change la vitesse pour (-50, 50) et on laisse passer 1000 ms.
  * On change la vitesse pour (78, 78) et on laisse passer 2000 ms.
  * Fin de la manoeuvre.
  */
-void manoeuvre4(LCM &disp)
+void Robot::manoeuvre4()
 {
     disp.clear();
     disp << "Manoeuvre 4";
@@ -228,7 +157,7 @@ void manoeuvre4(LCM &disp)
  * À (63, 63), on laisse passer 2000 ms.
  * Fin de la manoeuvre.
  */
-void manoeuvre5(LCM &disp)
+void Robot::manoeuvre5()
 {
     disp.clear();
     disp << "Manoeuvre 5";
@@ -262,7 +191,7 @@ void manoeuvre5(LCM &disp)
  * À (41, 41), on laisse passer 2000 ms.
  * Fin de la manoeuvre.
  */
-void manoeuvre6(LCM &disp)
+void Robot::manoeuvre6()
 {
     disp.clear();
     disp << "Manoeuvre 6";
@@ -288,7 +217,7 @@ void manoeuvre6(LCM &disp)
  * Fonction permettant d'allumer la minuterie qui gere les afficheurs
  * @return void
 */
-void minuterieAfficheur(uint8_t valeur){
+void Robot::minuterieAfficheur(uint8_t valeur){
 	TCNT2 = 0; //compteur à 0
 
 	//f=fréquence, N=facteur de prescaler
@@ -315,19 +244,30 @@ void minuterieAfficheur(uint8_t valeur){
     TIMSK2 |= (1 << OCIE2B);
 }
 
-void afficheTrait(){
+/**
+ * Fonction qui affiche un trait sur
+ * afficheur 7 segments
+ */
+void Robot::afficheTrait(){
     PORTC = 0b00000010;
     //changer pour constantes trait
 }
 
-void activerAfficheur(){
+/**
+ * Fonction qui initialise les ports
+ * et active 5ieme afficheur
+ */
+void Robot::activerAfficheur(){
     initialiserDDRA(SORTIE);
     initialiserDDRC(SORTIE);
     afficheur = 1;
     PORTA = 0b01111111;
 }
 
-void changerAfficheur(){
+/**
+ * Fonction qui change au prochain afficheur
+ */
+void Robot::changerAfficheur(){
     PORTA = PINA * 2;
     PORTA ++;
     if(PINA == 0xFF){
@@ -336,7 +276,12 @@ void changerAfficheur(){
     }
 }
 
-void affiche(uint8_t chiffre){
+/**
+ * Fonction qui affiche le chiffre passee en parametre
+ * @param uint8_t chiffre a afficher
+ * @return void
+ */
+void Robot::affiche(uint8_t chiffre){
     switch (chiffre)
     {
     case 0:
@@ -384,104 +329,7 @@ void affiche(uint8_t chiffre){
     }
 }
 
-void initialisationBouton(){
-    cli();
-    //Activer interruption bouton-poussoir
-    EIMSK |= (1 << INT1); 
-    EICRA |= (1 << ISC21);
-    sei();
-}
-
-
-int main()
-{
-    initialisationBouton();
-
-    for (;;)
-    {
-        switch (etatPresent)
-        {
-        case Etats::DETECTION:
-            initialiserDDR(ENTREE, SORTIE, ENTREE, ENTREE);
-            /**
-             * Les oscilloscopes ne doivent pas recevoir de signaux, 
-             * les DEL et les afficheurs 7 segments doivent être éteints.
-             */
-            //4 tours de boucle/seconde 1 tour = 0,25s
-            //Afficher distance et catégorie selon format 
-            sonar.detecterObjets();  
-
-            //Bouton-poussoir change mode manoeuvre si utilisateur satisfait
-            break;
-
-        case Etats::MANOEUVRE1:
-            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
-            activerAfficheur();
-            minuterieAfficheur(0);
-            //Manoeuvre 1
-            manoeuvre1(disp);
-            etatPresent = DETECTION;
-            break;
-
-        case Etats::MANOEUVRE2:
-            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
-            activerAfficheur();
-            minuterieAfficheur(0);
-            //Manoeuvre 2
-            manoeuvre2(disp);
-            etatPresent = DETECTION;
-            break;
-
-        case Etats::MANOEUVRE3:
-            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
-            activerAfficheur();
-            minuterieAfficheur(0);
-            //Manoeuvre 3
-            manoeuvre3(disp);
-            etatPresent = DETECTION;
-            break;
-
-        case Etats::MANOEUVRE4:
-            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
-            activerAfficheur();
-            minuterieAfficheur(0);
-            //Manoeuvre 4
-            manoeuvre4(disp);
-            etatPresent = DETECTION;
-            break;
-
-        case Etats::MANOEUVRE5:
-            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
-            activerAfficheur();
-            minuterieAfficheur(0);
-            //Manoeuvre 5
-            manoeuvre5(disp);
-            etatPresent = DETECTION;
-            break;
-
-        case Etats::MANOEUVRE6:
-            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
-            activerAfficheur();
-            minuterieAfficheur(0);
-            //Manoeuvre 6
-            manoeuvre6(disp);
-            etatPresent = DETECTION;
-            break;
-
-        case Etats::MANOEUVREX:
-            disp.clear();
-            disp << "Combinaison non evaluee";
-            attendre_ms(2000);
-            disp.clear();
-            etatPresent = DETECTION;
-            break;
-        }
-    }
-    
-    return 0;
-}
-
-ISR(TIMER2_COMPB_vect){
+Robot::ISR(TIMER2_COMPB_vect){
     uint8_t gauche;
     uint8_t droite;
     
@@ -536,40 +384,3 @@ ISR(TIMER2_COMPB_vect){
     afficheur ++;
 }
 
-
-ISR(INT1_vect){
-    uint8_t s1 = sonar.getDistance1();
-    uint8_t s2 = sonar.getDistance2();
-    uint8_t s3 = sonar.getDistance3();
-   
-    //Manoeuvre 1
-    if(s1>=30 && s2>=30 && (s3>=10 && s3<30)){
-        etatPresent = MANOEUVRE1;            
-    }
-    //Manoeuvre 2
-    else if((s1>=10 && s1<30) && s2>=30 && s3>=30){
-        etatPresent = MANOEUVRE2;            
-    }
-    //Manoeuvre 3
-    else if(s1>=30 && s2<10 && s3<10){
-        etatPresent = MANOEUVRE3;            
-    }
-    //Manoeuvre 4
-    else if(s1<10 && s2<10 && s3>=30){
-        etatPresent = MANOEUVRE4;            
-    }
-    //Manoeuvre 5
-    else if(s1<10 && s2<10 && s3<10){
-        etatPresent = MANOEUVRE5;            
-    }
-    //Manoeuvre 6
-    else if((s1>=10 && s1<30) && s2>=30 && (s3>=10 && s3<30)){
-        etatPresent = MANOEUVRE6;            
-    }
-    //Combinaison non reconnue
-    else
-    {
-        etatPresent = MANOEUVREX;
-    }
-    
-}

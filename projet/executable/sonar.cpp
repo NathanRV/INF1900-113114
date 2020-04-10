@@ -1,11 +1,5 @@
 #include "sonar.h"
 
-Sonar::Sonar(LCM *display) : disp(display)
-{
-    //set pre-scaler
-    TCCR1B |= (1 << CS11);
-}
-
 float Sonar::calculerDistance(uint8_t sonarPort)
 {
     float count = 0;
@@ -30,10 +24,14 @@ float Sonar::calculerDistance(uint8_t sonarPort)
 
 }
 
-void Sonar::detecterObjets() {
+void Sonar::calculerDistances(){
     distanceSonar1 = calculerDistance(PINA0);
     distanceSonar2 = calculerDistance(PINA1);
     distanceSonar3 = calculerDistance(PINA2);
+}
+
+void Sonar::detecterObjets() {
+    calculerDistances();
     afficherMesures();
 }
 
@@ -42,35 +40,48 @@ void Sonar::afficherMesures() {
     dtostrf(distanceSonar1, 3, 1, sonarOutput1);
     dtostrf(distanceSonar2, 3, 1, sonarOutput2);
     dtostrf(distanceSonar3, 3, 1, sonarOutput3);
-    disp->write(sonarOutput1, 0, false);
-    disp->put('m');
-    disp->write(sonarOutput2, 6, false);
-    disp->put('m');
-    disp->write(sonarOutput3, 12, false);
-    disp->put('m');
+    disp.write(sonarOutput1, 0, false);
+    disp.put('m');
+    disp.write(sonarOutput2, 6, false);
+    disp.put('m');
+    disp.write(sonarOutput3, 12, false);
+    disp.put('m');
 
     if (distanceSonar1 < 1) {
-        disp->write("DNGR", LCM_FW_HALF_CH, false);
+        disp.write("DNGR", LCM_FW_HALF_CH, false);
     } else if (distanceSonar1 >= 1 && distanceSonar1 < 3) {
-        disp->write("ATTN", LCM_FW_HALF_CH, false);
+        disp.write("ATTN", LCM_FW_HALF_CH, false);
     } else {
-        disp->write(" OK ", LCM_FW_HALF_CH, false);
+        disp.write(" OK ", LCM_FW_HALF_CH, false);
     }
 
     if (distanceSonar2 < 1) {
-        disp->write("DNGR", LCM_FW_HALF_CH + 6, false);
+        disp.write("DNGR", LCM_FW_HALF_CH + 6, false);
     } else if (distanceSonar2 >= 1 && distanceSonar2 < 3) {
-        disp->write("ATTN", LCM_FW_HALF_CH + 6, false);
+        disp.write("ATTN", LCM_FW_HALF_CH + 6, false);
     } else {
-        disp->write(" OK ", LCM_FW_HALF_CH + 6, false);
+        disp.write(" OK ", LCM_FW_HALF_CH + 6, false);
     }
 
     if (distanceSonar3 < 1) {
-        disp->write("DNGR", LCM_FW_HALF_CH + 12, false);
+        disp.write("DNGR", LCM_FW_HALF_CH + 12, false);
     } else if (distanceSonar3 >= 1 && distanceSonar3 < 3) {
-        disp->write("ATTN", LCM_FW_HALF_CH + 12, false);
+        disp.write("ATTN", LCM_FW_HALF_CH + 12, false);
     } else {
-        disp->write(" OK ", LCM_FW_HALF_CH + 12, false);
+        disp.write(" OK ", LCM_FW_HALF_CH + 12, false);
     }
 
+}
+
+/**
+ * Accesseurs de distances
+ */
+uint8_t Sonar::getDistance1(){
+    return uint8_t(distanceSonar1*10);
+}
+uint8_t Sonar::getDistance2(){
+    return uint8_t(distanceSonar2*10);
+}
+uint8_t Sonar::getDistance3(){
+    return uint8_t(distanceSonar3*10);
 }

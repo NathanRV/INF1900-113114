@@ -9,7 +9,11 @@
 class Sonar
 {
 public:
-    Sonar(LCM *display);
+    Sonar() : disp(&DDRB, &PORTB)
+    {
+        //set pre-scaler
+        TCCR1B |= (1 << CS11);
+    }
 
     /*
     * Methode qui envoie un signal "trigger" pour enclencher un signal au sonar
@@ -19,6 +23,12 @@ public:
     * @param out: la distance entre le sonar et l'objet
     */
     float calculerDistance(uint8_t sonarPort);
+
+    /**
+     * Methode qui calculer les 3 distances et
+     * met a jour les attributs de l'objet
+     */
+    void calculerDistances();
 
     /*
     * Méthode qui permet l'activation des trois sonars et qui met a jour les 
@@ -31,7 +41,16 @@ public:
     */
     void afficherMesures();
 
+    /**
+     * Accesseurs de distances
+     * multiplie par 10
+     * en uint8_t
+     */
+    uint8_t getDistance1();
+    uint8_t getDistance2();
+    uint8_t getDistance3();
+
 private:
     float distanceSonar1, distanceSonar2, distanceSonar3;
-    LCM *disp;
+    LCM disp;
 };
