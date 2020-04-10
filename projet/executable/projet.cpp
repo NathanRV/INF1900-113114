@@ -23,6 +23,7 @@
 #include "customprocs.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include "sonar.h"
 
 int8_t pDroite = 0;
 int8_t pGauche = 0;
@@ -276,40 +277,6 @@ void manoeuvre6(LCM &disp)
     disp.clear();
 }
 
-class Sonar
-{
-public:
-    //Selon la methode #1 du document.
-    void calculaterDistance(uint8_t sonarPort)
-    {
-        //Envoyer un signal de trigger
-        PORTB |= (1 << 0x01);
-    }
-
-private:
-    char *states;
-};
-
-/**
- * 0 : dot
- * 1 : middle
- * 2 : upper left
- * 3 : lower left
- * 4 : lower centre
- * 5 : lower right
- * 6 : upper right
- * 7 : upper centre
- * Suggestion : utilisez Timer/Counter2 pour réaliser cette fonctionnalité. 
- * Plus particulièrement,ajuster les registres nécessaires et ensuite 
- * placer votre code dans la fonction
- * ISR(TIMER2_COMPB_vect).
- * 
- * En mode détection, les oscilloscopes ne doivent pas recevoir de signaux, 
- * les DEL et les afficheurs 7 segments doivent être éteints.
- * 
- * Les afficheurs 7 segments affiche puissance des roues.
- */
-
 /** 
  * Fonction permettant d'allumer la minuterie qui gere les afficheurs
  * @return void
@@ -417,10 +384,11 @@ void initialisationBouton(){
     sei();
 }
 
+
 int main()
 {
     LCM disp(&DDRB, &PORTB);
-    double count;
+    Sonar sonar;
 
     for (;;)
     {
@@ -435,34 +403,11 @@ int main()
              * les DEL et les afficheurs 7 segments doivent être éteints.
              */
 
-             //4 tours de boucle/seconde 1 tour = 0,25s
-            //Detecter présence d'obstacles à gauche, devant, droite
-            /*
-            * Implementation test du sonar 
-            */
-            char sonarOutput[10];
-            count = 0;
-            float distance;
-
-            TCCR1B |= (1 << CS11);
-            disp.clear();
-            PORTB |= 0x01;
-            _delay_us(10);
-            PORTB &= ~(1 << sonar_out);
-
-            TCNT1 = 0;
-
-            while (!(PINA & (1 << sonar_in)) && (TCNT1 < 58800))
-                ;
-            TCNT1 = 0;
-            while ((PINA & (1 << sonar_in)) && (TCNT1 < 58800))
-                ;
-            count = TCNT1;
-            distance = ((float)count / 5800);
-            dtostrf(distance, 3, 2, sonarOutput);
-            disp << sonarOutput;
-            w();
-            attendre_ms(1000);                
+            //4 tours de boucle/seconde 1 tour = 0,25s
+            while (1)
+            {
+                sonar.calculerDistance(PINA1);
+            }
             //Afficher distance et catégorie selon format                
 
             //Bouton-poussoir change mode manoeuvre si utilisateur satisfait
