@@ -43,12 +43,10 @@ public:
 
     /**
      * Accesseurs de distances
-     * multiplie par 10
-     * en uint8_t
      */
-    uint8_t getDistance1();
-    uint8_t getDistance2();
-    uint8_t getDistance3();
+    float getDistance1();
+    float getDistance2();
+    float getDistance3();
 
 private:
     float distanceSonar1, distanceSonar2, distanceSonar3;

@@ -538,32 +538,32 @@ ISR(TIMER2_COMPB_vect){
 
 
 ISR(INT1_vect){
-    uint8_t s1 = sonar.getDistance1();
-    uint8_t s2 = sonar.getDistance2();
-    uint8_t s3 = sonar.getDistance3();
+    float s1 = sonar.getDistance1();
+    float s2 = sonar.getDistance2();
+    float s3 = sonar.getDistance3();
    
     //Manoeuvre 1
-    if(s1>=30 && s2>=30 && (s3>=10 && s3<30)){
+    if(s1>=3 && s2>=3 && (s3>=1 && s3<3)){
         etatPresent = MANOEUVRE1;            
     }
     //Manoeuvre 2
-    else if((s1>=10 && s1<30) && s2>=30 && s3>=30){
+    else if((s1>=1 && s1<3) && s2>=3 && s3>=3){
         etatPresent = MANOEUVRE2;            
     }
     //Manoeuvre 3
-    else if(s1>=30 && s2<10 && s3<10){
+    else if(s1>=3 && s2<1 && s3<1){
         etatPresent = MANOEUVRE3;            
     }
     //Manoeuvre 4
-    else if(s1<10 && s2<10 && s3>=30){
+    else if(s1<1 && s2<1 && s3>=3){
         etatPresent = MANOEUVRE4;            
     }
     //Manoeuvre 5
-    else if(s1<10 && s2<10 && s3<10){
+    else if(s1<1 && s2<1 && s3<1){
         etatPresent = MANOEUVRE5;            
     }
     //Manoeuvre 6
-    else if((s1>=10 && s1<30) && s2>=30 && (s3>=10 && s3<30)){
+    else if((s1>=1 && s1<3) && s2>=3 && (s3>=1 && s3<3)){
         etatPresent = MANOEUVRE6;            
     }
     //Combinaison non reconnue

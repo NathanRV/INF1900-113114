@@ -76,12 +76,12 @@ void Sonar::afficherMesures() {
 /**
  * Accesseurs de distances
  */
-uint8_t Sonar::getDistance1(){
-    return uint8_t(distanceSonar1*10);
+float Sonar::getDistance1(){
+    return distanceSonar1;
 }
-uint8_t Sonar::getDistance2(){
-    return uint8_t(distanceSonar2*10);
+float Sonar::getDistance2(){
+    return distanceSonar2;
 }
-uint8_t Sonar::getDistance3(){
-    return uint8_t(distanceSonar3*10);
+float Sonar::getDistance3(){
+    return distanceSonar3;
 }
