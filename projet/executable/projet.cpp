@@ -61,14 +61,13 @@ enum Etats // Etats possibles
     MANOEUVRE6,
     MANOEUVREX
 };
-
 //Variables Globales
 Etats etatPresent = DETECTION;
 LCM disp(&DDRB, &PORTB);
 Sonar sonar;
-int8_t pDroite = 0;
-int8_t pGauche = 0;
-int8_t afficheur = 1;
+// int8_t pDroite = 0;
+// int8_t pGauche = 0;
+// int8_t afficheur = 1;
 
 void static inline w(void)
 {
@@ -327,7 +326,7 @@ void activerAfficheur()
 {
     initialiserDDRA(SORTIE);
     initialiserDDRC(SORTIE);
-    afficheur = 1;
+    Robot::afficheur_ = 1;
     PORTA = 0b01111111;
 }
 
@@ -495,22 +494,22 @@ ISR(TIMER2_COMPB_vect)
     uint8_t gauche;
     uint8_t droite;
 
-    if (pGauche < 0)
-        gauche = -pGauche;
+    if (Robot::pGauche_ < 0)
+        gauche = -Robot::pGauche_;
     else
-        gauche = pGauche;
+        gauche = Robot::pGauche_;
 
-    if (pDroite < 0)
-        droite = -pDroite;
+    if (Robot::pDroite_ < 0)
+        droite = -Robot::pDroite_;
     else
-        droite = pDroite;
+        droite = Robot::pDroite_;
 
     uint8_t gaucheUnite = gauche % 10;
     uint8_t gaucheDiz = (gauche - gaucheUnite) / 10;
     uint8_t droiteUnite = droite % 10;
     uint8_t droiteDiz = (droite - droiteUnite) / 10;
 
-    switch (afficheur)
+    switch (Robot::afficheur_)
     {
     case 1:
         changerAfficheur();
@@ -535,13 +534,13 @@ ISR(TIMER2_COMPB_vect)
     case 5:
         changerAfficheur();
         affiche(droiteUnite);
-        afficheur = 0;
+        Robot::afficheur_ = 0;
         break;
 
     default:
         break;
     }
-    afficheur++;
+    Robot::afficheur_ = Robot::afficheur_ + 1;
 }
 
 ISR(INT1_vect)

@@ -102,9 +102,11 @@ public:
     //  */
     // void affiche(uint8_t chiffre);
 
+    //todo incrementer afficheur
+    static int8_t pDroite_;
+    static int8_t pGauche_;
+    static uint8_t afficheur_;
+
 private:
-    int8_t pDroite = 0;
-    int8_t pGauche = 0;
-    uint8_t afficheur = 1;
-    LCM disp;
+    LCM disp_;
 };
