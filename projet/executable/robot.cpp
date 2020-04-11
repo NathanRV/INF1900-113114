@@ -1,6 +1,8 @@
 #include "robot.h"
 
 uint8_t Robot::pDroite_ = 0;
+uint8_t Robot::pGauche_ = 0;
+uint8_t Robot::afficheur_ = 1;
 
 Robot::Robot() : disp_(&DDRB, &PORTB) {}
 
@@ -164,4 +166,29 @@ void Robot::manoeuvre6()
     attendre_ms(1500); //500 ms deja ecoules
     arreterMoteur();
     disp_.clear();
+}
+
+uint8_t Robot::getpGauche()
+{
+    return pGauche_;
+}
+
+uint8_t Robot::getpDroite()
+{
+    return pDroite_;
+}
+
+uint8_t Robot::getAfficheur()
+{
+    return afficheur_;
+}
+
+void Robot::setAfficheur(uint8_t afficheur)
+{
+    afficheur_ = afficheur;
+}
+
+void Robot::incrementerAfficheur()
+{
+    afficheur_++;
 }

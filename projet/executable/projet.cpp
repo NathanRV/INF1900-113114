@@ -326,7 +326,7 @@ void activerAfficheur()
 {
     initialiserDDRA(SORTIE);
     initialiserDDRC(SORTIE);
-    Robot::afficheur_ = 1;
+    Robot::setAfficheur(1);
     PORTA = 0b01111111;
 }
 
@@ -494,22 +494,22 @@ ISR(TIMER2_COMPB_vect)
     uint8_t gauche;
     uint8_t droite;
 
-    if (Robot::pGauche_ < 0)
-        gauche = -Robot::pGauche_;
+    if (Robot::getpGauche() < 0)
+        gauche = -Robot::getpGauche();
     else
-        gauche = Robot::pGauche_;
+        gauche = Robot::getpGauche();
 
-    if (Robot::pDroite_ < 0)
-        droite = -Robot::pDroite_;
+    if (Robot::getpDroite() < 0)
+        droite = -Robot::getpDroite();
     else
-        droite = Robot::pDroite_;
+        droite = Robot::getpDroite();
 
     uint8_t gaucheUnite = gauche % 10;
     uint8_t gaucheDiz = (gauche - gaucheUnite) / 10;
     uint8_t droiteUnite = droite % 10;
     uint8_t droiteDiz = (droite - droiteUnite) / 10;
 
-    switch (Robot::afficheur_)
+    switch (Robot::getAfficheur())
     {
     case 1:
         changerAfficheur();
@@ -534,13 +534,13 @@ ISR(TIMER2_COMPB_vect)
     case 5:
         changerAfficheur();
         affiche(droiteUnite);
-        Robot::afficheur_ = 0;
+        Robot::setAfficheur(0);
         break;
 
     default:
         break;
     }
-    Robot::afficheur_ = Robot::afficheur_ + 1;
+    Robot::incrementerAfficheur();
 }
 
 ISR(INT1_vect)

@@ -103,10 +103,18 @@ public:
     // void affiche(uint8_t chiffre);
 
     //todo incrementer afficheur
-    static int8_t pDroite_;
-    static int8_t pGauche_;
-    static uint8_t afficheur_;
+
+    static uint8_t getpGauche();
+    static uint8_t getpDroite();
+    static uint8_t getAfficheur();
+
+    static void setAfficheur(uint8_t afficheur);
+
+    static void incrementerAfficheur();
 
 private:
+    static uint8_t pDroite_;
+    static uint8_t pGauche_;
+    static uint8_t afficheur_;
     LCM disp_;
 };
