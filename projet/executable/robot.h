@@ -72,35 +72,35 @@ public:
      */
     void manoeuvre6();
 
-    /** 
-     * Fonction permettant d'allumer la minuterie qui gere les afficheurs
-     * @return void
-     */
-    void minuterieAfficheur(uint8_t valeur);
+    // /**
+    //  * Fonction permettant d'allumer la minuterie qui gere les afficheurs
+    //  * @return void
+    //  */
+    // void minuterieAfficheur(uint8_t valeur);
 
-    /**
-     * Fonction qui affiche un trait sur
-     * afficheur 7 segments
-     */
-    void afficheTrait();
+    // /**
+    //  * Fonction qui affiche un trait sur
+    //  * afficheur 7 segments
+    //  */
+    // void afficheTrait();
 
-    /**
-     * Fonction qui initialise les ports
-     * et active 5ieme afficheur
-     */
-    void activerAfficheur();
+    // /**
+    //  * Fonction qui initialise les ports
+    //  * et active 5ieme afficheur
+    //  */
+    // void activerAfficheur();
 
-    /**
-     * Fonction qui change au prochain afficheur
-     */
-    void changerAfficheur();
+    // /**
+    //  * Fonction qui change au prochain afficheur
+    //  */
+    // void changerAfficheur();
 
-    /**
-     * Fonction qui affiche le chiffre passee en parametre
-     * @param uint8_t chiffre a afficher
-     * @return void
-     */
-    void affiche(uint8_t chiffre);
+    // /**
+    //  * Fonction qui affiche le chiffre passee en parametre
+    //  * @param uint8_t chiffre a afficher
+    //  * @return void
+    //  */
+    // void affiche(uint8_t chiffre);
 
 private:
     int8_t pDroite = 0;
