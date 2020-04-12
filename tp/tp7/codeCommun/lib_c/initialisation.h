@@ -61,4 +61,10 @@ void initialisationUART(void);
  */
 void initialisationInterruption(uint8_t etatA, uint8_t etatB, uint8_t etatC, uint8_t etatD);
 
+/**
+ * Initialise le bouton-poussoir avec une routine d'interruption
+ * @return void
+ */
+void initialisationBouton();
+
 #endif //INITIALISATION_H

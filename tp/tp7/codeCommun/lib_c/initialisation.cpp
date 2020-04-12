@@ -114,3 +114,16 @@ void initialisationInterruption(uint8_t etatA, uint8_t etatB, uint8_t etatC, uin
     // sei permet de recevoir à nouveau des interruptions.
     sei();
 }
+
+/**
+ * Initialise le bouton-poussoir avec une routine d'interruption
+ * @return void
+ */
+void initialisationBouton()
+{
+    cli();
+    //Activer interruption bouton-poussoir
+    EIMSK |= (1 << INT1);
+    EICRA |= (1 << ISC21);
+    sei();
+}
