@@ -1,3 +1,5 @@
+#ifndef ROBOT_H
+#define ROBOT_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,6 +9,22 @@
 #include "delay.h"
 #include "lcm_so1602dtr_m_fw.h"
 #include "customprocs.h"
+#include "sonar.h"
+
+extern Sonar sonar;
+
+enum Etats // Etats possibles
+{
+    DETECTION = 0,
+    MANOEUVRE1,
+    MANOEUVRE2,
+    MANOEUVRE3,
+    MANOEUVRE4,
+    MANOEUVRE5,
+    MANOEUVRE6,
+    MANOEUVREX
+};
+
 
 class Robot
 {
@@ -72,42 +90,57 @@ public:
      */
     void manoeuvre6();
 
-    // /**
-    //  * Fonction permettant d'allumer la minuterie qui gere les afficheurs
-    //  * @return void
-    //  */
-    // void minuterieAfficheur(uint8_t valeur);
+    /**
+     * Fonction qui contrôle la machine à états du robot
+     * @param in l'état présent
+     * @return void
+     */
+    void controlerEtat(Etats etat);
 
-    // /**
-    //  * Fonction qui affiche un trait sur
-    //  * afficheur 7 segments
-    //  */
-    // void afficheTrait();
+    /**
+     * Fonction permettant d'allumer la minuterie qui gere les afficheurs
+     * @return void
+     */
+    void minuterieAfficheur(uint8_t valeur);
 
-    // /**
-    //  * Fonction qui initialise les ports
-    //  * et active 5ieme afficheur
-    //  */
-    // void activerAfficheur();
+    /**
+     * Fonction qui affiche un trait sur
+     * afficheur 7 segments
+     */
+    static void afficheTrait();
 
-    // /**
-    //  * Fonction qui change au prochain afficheur
-    //  */
-    // void changerAfficheur();
+    /**
+     * Fonction qui initialise les ports
+     * et active 5ieme afficheur
+     */
+    void activerAfficheur();
 
-    // /**
-    //  * Fonction qui affiche le chiffre passee en parametre
-    //  * @param uint8_t chiffre a afficher
-    //  * @return void
-    //  */
-    // void affiche(uint8_t chiffre);
+    /**
+     * Fonction qui change au prochain afficheur
+     */
+    static void changerAfficheur();
 
-    //todo incrementer afficheur
+    /**
+     * Fonction qui affiche le chiffre passee en parametre
+     * @param uint8_t chiffre a afficher
+     * @return void
+     */
+    static void affiche(uint8_t chiffre);
 
+
+    /**
+     * Getters des attributs statiques privés
+     * @return l'attribut
+     */
     static uint8_t getpGauche();
     static uint8_t getpDroite();
     static uint8_t getAfficheur();
 
+    /**
+     * Setter de l'attribut afficheur_
+     * @param uint8_t chiffre a attribuer
+     * @return void
+     */
     static void setAfficheur(uint8_t afficheur);
 
     static void incrementerAfficheur();
@@ -118,3 +151,4 @@ private:
     static uint8_t afficheur_;
     LCM disp_;
 };
+#endif //ROBOT_H

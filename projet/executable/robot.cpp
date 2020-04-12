@@ -168,6 +168,191 @@ void Robot::manoeuvre6()
     disp_.clear();
 }
 
+void Robot::controlerEtat(Etats etat)
+{
+    switch (etat)
+    {
+        case DETECTION:
+            initialiserDDR(ENTREE, SORTIE, ENTREE, ENTREE);
+            /**
+             * Les oscilloscopes ne doivent pas recevoir de signaux, 
+             * les DEL et les afficheurs 7 segments doivent être éteints.
+             */
+            //4 tours de boucle/seconde 1 tour = 0,25s
+            //Afficher distance et catégorie selon format
+            sonar.detecterObjets();
+
+            //Bouton-poussoir change mode manoeuvre si utilisateur satisfait
+            break;
+
+        case MANOEUVRE1:
+            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
+            activerAfficheur();
+            minuterieAfficheur(0);
+            //Manoeuvre 1
+            manoeuvre1();
+            etat = Etats::DETECTION;
+
+            break;
+
+        case MANOEUVRE2:
+            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
+            activerAfficheur();
+            minuterieAfficheur(0);
+            //Manoeuvre 2
+            manoeuvre2();
+            etat = Etats::DETECTION;
+            break;
+
+        case MANOEUVRE3:
+            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
+            activerAfficheur();
+            minuterieAfficheur(0);
+            //Manoeuvre 3
+            manoeuvre3();
+            etat = Etats::DETECTION;
+            break;
+
+        case MANOEUVRE4:
+            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
+            activerAfficheur();
+            minuterieAfficheur(0);
+            //Manoeuvre 4
+            manoeuvre4();
+            etat = Etats::DETECTION;
+            break;
+
+        case MANOEUVRE5:
+            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
+            activerAfficheur();
+            minuterieAfficheur(0);
+            //Manoeuvre 5
+            manoeuvre5();
+            etat = Etats::DETECTION;
+            break;
+
+        case MANOEUVRE6:
+            initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
+            activerAfficheur();
+            minuterieAfficheur(0);
+            //Manoeuvre 6
+            manoeuvre6();
+            etat = Etats::DETECTION;
+            break;
+
+        case MANOEUVREX:
+            disp_.clear();
+            disp_ << "Combinaison non evaluee";
+            attendre_ms(2000);
+            disp_.clear();
+            etat = Etats::DETECTION;
+            break;
+    }
+}
+
+
+void Robot::minuterieAfficheur(uint8_t valeur)
+{
+    TCNT2 = 0; //compteur à 0
+
+    //f=fréquence, N=facteur de prescaler
+    //fOCnA=fclk/2N(1+OCRnX)
+
+    // mise à un des sorties OC1A et OC1B sur comparaison
+    // réussie en mode PWM 8 bits, phase correcte
+    // et valeur de TOP fixe à 0xFF (mode #1 de la table 17-6
+    // page 177 de la description technique du ATmega324PA)
+
+    //OCR2B = valeur;
+    //Output compare Register 1B correspond à D6 (OC2B)
+
+    // division d'horloge par 8 - implique une frequence de PWM fixe
+
+    //Voir p.152
+    //TCCR2A |= (1 << WGM21) | (1 << COM2B1); //Table 16-4.
+    //  COMnB0:Clear OCnB on Compare Match
+    //  WGMn0:PWM, phase correct, 8-bit
+    TCCR2B |= (1 << CS20) | (1 << CS21);
+    //max prescaler of 32
+
+    //Interruption comparaison OCIE2B
+    TIMSK2 |= (1 << OCIE2B);
+}
+
+void Robot::afficheTrait()
+{
+    PORTC = 0b00000010;
+    //changer pour constantes trait
+}
+
+void Robot::activerAfficheur()
+{
+    initialiserDDRA(SORTIE);
+    initialiserDDRC(SORTIE);
+    setAfficheur(1);
+    PORTA = 0b01111111;
+}
+
+void Robot::changerAfficheur()
+{
+    PORTA = PINA * 2;
+    PORTA++;
+    if (PINA == 0xFF)
+    {
+        PORTA = 0b11110111;
+        //afficheur 1
+    }
+}
+
+void Robot::affiche(uint8_t chiffre)
+{
+    switch (chiffre)
+    {
+    case 0:
+        PORTC = 0b11111100;
+        break;
+
+    case 1:
+        PORTC = 0b01100000;
+        break;
+
+    case 2:
+        PORTC = 0b11011010;
+        break;
+
+    case 3:
+        PORTC = 0b11110010;
+        break;
+
+    case 4:
+        PORTC = 0b01100110;
+        break;
+
+    case 5:
+        PORTC = 0b10110110;
+        break;
+
+    case 6:
+        PORTC = 0b10111110;
+        break;
+
+    case 7:
+        PORTC = 0b11100000;
+        break;
+
+    case 8:
+        PORTC = 0b11111110;
+        break;
+
+    case 9:
+        PORTC = 0b11110110;
+        break;
+
+    default:
+        break;
+    }
+}
+
 uint8_t Robot::getpGauche()
 {
     return pGauche_;

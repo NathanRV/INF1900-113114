@@ -1,3 +1,6 @@
+#ifndef SONAR_H
+#define SONAR_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "delay.h"
@@ -52,3 +55,4 @@ private:
     float distanceSonar1, distanceSonar2, distanceSonar3;
     LCM disp;
 };
+#endif //SONAR_H
