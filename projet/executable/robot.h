@@ -95,7 +95,7 @@ public:
      * @param in l'état présent
      * @return void
      */
-    void controlerEtat(Etats etat);
+    void controlerEtat(Etats& etat);
 
     /**
      * Fonction permettant d'allumer la minuterie qui gere les afficheurs

@@ -168,7 +168,7 @@ void Robot::manoeuvre6()
     disp_.clear();
 }
 
-void Robot::controlerEtat(Etats etat)
+void Robot::controlerEtat(Etats& etat)
 {
     switch (etat)
     {
@@ -192,7 +192,6 @@ void Robot::controlerEtat(Etats etat)
             //Manoeuvre 1
             manoeuvre1();
             etat = Etats::DETECTION;
-
             break;
 
         case MANOEUVRE2:
