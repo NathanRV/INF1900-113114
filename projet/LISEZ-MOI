@@ -1,0 +1,2 @@
+
+Lorsque l'on lance la simulation la première fois : s'assurer de partir la tension dans le bouton-poussoir OU faire un reload du firmware immédiatement avant de commencer à utiliser le logiciel. Un problème quelconque force l'affichage à manoeuvre 5 si ce protocole n'est pas suivi.
