@@ -129,12 +129,13 @@ public:
 
 
     /**
-     * Getters des attributs statiques privés
+     * Accesseurs et modificateurs des attributs statiques privés
      * @return l'attribut
      */
-    static uint8_t getpGauche();
-    static uint8_t getpDroite();
+    static int8_t getpGauche();
+    static int8_t getpDroite();
     static uint8_t getAfficheur();
+    static void setPourcentage(int8_t pGauche, int8_t pDroite);
 
     /**
      * Setter de l'attribut afficheur_
@@ -146,8 +147,8 @@ public:
     static void incrementerAfficheur();
 
 private:
-    static uint8_t pDroite_;
-    static uint8_t pGauche_;
+    static int8_t pDroite_;
+    static int8_t pGauche_;
     static uint8_t afficheur_;
     LCM disp_;
 };
