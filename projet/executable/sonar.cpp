@@ -19,16 +19,16 @@ float Sonar::calculerDistance(uint8_t sonarPort)
 
     TCNT1 = 0;
 
-    while (!(PINA & (1 << sonarPort)) && TCNT1 < 58800)
+    while (!(PINA & (1 << sonarPort)) && TCNT1 < LIMITE_COMPTEUR)
         ;
 
     TCNT1 = 0;
 
-    while ((PINA & (1 << sonarPort)) && TCNT1 < 58800)
+    while ((PINA & (1 << sonarPort)) && TCNT1 < LIMITE_COMPTEUR)
         ;
 
     count = TCNT1;
-    float distance = count / 5800;
+    float distance = count / FACTEUR_CONVERSION;
     return distance;
 
 }
@@ -46,38 +46,38 @@ void Sonar::detecterObjets() {
 
 void Sonar::afficherMesures() {
     char sonarOutput1[10], sonarOutput2[10], sonarOutput3[10];
-    dtostrf(distanceSonar1, 3, 1, sonarOutput1);
-    dtostrf(distanceSonar2, 3, 1, sonarOutput2);
-    dtostrf(distanceSonar3, 3, 1, sonarOutput3);
-    disp.write(sonarOutput1, 0, false);
+    dtostrf(distanceSonar1, LARGEUR_NOMBRE, PRECISION_NOMBRE, sonarOutput1);
+    dtostrf(distanceSonar2, LARGEUR_NOMBRE, PRECISION_NOMBRE, sonarOutput2);
+    dtostrf(distanceSonar3, LARGEUR_NOMBRE, PRECISION_NOMBRE, sonarOutput3);
+    disp.write(sonarOutput1, POSITION_SONAR1, false);
     disp.put('m');
-    disp.write(sonarOutput2, 6, false);
+    disp.write(sonarOutput2, POSITION_SONAR2, false);
     disp.put('m');
-    disp.write(sonarOutput3, 12, false);
+    disp.write(sonarOutput3, POSITION_SONAR3, false);
     disp.put('m');
 
-    if (distanceSonar1 < 1) {
+    if (distanceSonar1 < DISTANCE_DNGR) {
         disp.write("DNGR", LCM_FW_HALF_CH, false);
-    } else if (distanceSonar1 >= 1 && distanceSonar1 < 3) {
+    } else if (distanceSonar1 >= DISTANCE_DNGR && distanceSonar1 < DISTANCE_OK) {
         disp.write("ATTN", LCM_FW_HALF_CH, false);
     } else {
         disp.write(" OK ", LCM_FW_HALF_CH, false);
     }
 
-    if (distanceSonar2 < 1) {
-        disp.write("DNGR", LCM_FW_HALF_CH + 6, false);
-    } else if (distanceSonar2 >= 1 && distanceSonar2 < 3) {
-        disp.write("ATTN", LCM_FW_HALF_CH + 6, false);
+    if (distanceSonar2 < DISTANCE_DNGR) {
+        disp.write("DNGR", LCM_FW_HALF_CH + POSITION_SONAR2, false);
+    } else if (distanceSonar2 >= DISTANCE_DNGR && distanceSonar2 < DISTANCE_OK) {
+        disp.write("ATTN", LCM_FW_HALF_CH + POSITION_SONAR2, false);
     } else {
-        disp.write(" OK ", LCM_FW_HALF_CH + 6, false);
+        disp.write(" OK ", LCM_FW_HALF_CH + POSITION_SONAR2, false);
     }
 
-    if (distanceSonar3 < 1) {
-        disp.write("DNGR", LCM_FW_HALF_CH + 12, false);
-    } else if (distanceSonar3 >= 1 && distanceSonar3 < 3) {
-        disp.write("ATTN", LCM_FW_HALF_CH + 12, false);
+    if (distanceSonar3 < DISTANCE_DNGR) {
+        disp.write("DNGR", LCM_FW_HALF_CH + POSITION_SONAR3, false);
+    } else if (distanceSonar3 >= DISTANCE_DNGR && distanceSonar3 < DISTANCE_OK) {
+        disp.write("ATTN", LCM_FW_HALF_CH + POSITION_SONAR3, false);
     } else {
-        disp.write(" OK ", LCM_FW_HALF_CH + 12, false);
+        disp.write(" OK ", LCM_FW_HALF_CH + POSITION_SONAR3, false);
     }
 
 }

@@ -11,7 +11,7 @@
 
 int8_t Robot::pDroite_ = 0;
 int8_t Robot::pGauche_ = 0;
-uint8_t Robot::afficheur_ = 1;
+uint8_t Robot::afficheur_ = INIT_AFFICHEUR;
 
 Robot::Robot() : disp_(&DDRB, &PORTB) {}
 
@@ -190,7 +190,7 @@ void Robot::controlerEtat(Etats& etat)
         case MANOEUVRE1:
             initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
             activerAfficheur();
-            minuterieAfficheur(0);
+            minuterieAfficheur(RESET);
             //Manoeuvre 1
             manoeuvre1();
             etat = Etats::DETECTION;
@@ -199,7 +199,7 @@ void Robot::controlerEtat(Etats& etat)
         case MANOEUVRE2:
             initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
             activerAfficheur();
-            minuterieAfficheur(0);
+            minuterieAfficheur(RESET);
             //Manoeuvre 2
             manoeuvre2();
             etat = Etats::DETECTION;
@@ -208,7 +208,7 @@ void Robot::controlerEtat(Etats& etat)
         case MANOEUVRE3:
             initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
             activerAfficheur();
-            minuterieAfficheur(0);
+            minuterieAfficheur(RESET);
             //Manoeuvre 3
             manoeuvre3();
             etat = Etats::DETECTION;
@@ -217,7 +217,7 @@ void Robot::controlerEtat(Etats& etat)
         case MANOEUVRE4:
             initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
             activerAfficheur();
-            minuterieAfficheur(0);
+            minuterieAfficheur(RESET);
             //Manoeuvre 4
             manoeuvre4();
             etat = Etats::DETECTION;
@@ -226,7 +226,7 @@ void Robot::controlerEtat(Etats& etat)
         case MANOEUVRE5:
             initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
             activerAfficheur();
-            minuterieAfficheur(0);
+            minuterieAfficheur(RESET);
             //Manoeuvre 5
             manoeuvre5();
             etat = Etats::DETECTION;
@@ -235,7 +235,7 @@ void Robot::controlerEtat(Etats& etat)
         case MANOEUVRE6:
             initialisationInterruption(SORTIE, SORTIE, SORTIE, SORTIE);
             activerAfficheur();
-            minuterieAfficheur(0);
+            minuterieAfficheur(RESET);
             //Manoeuvre 6
             manoeuvre6();
             etat = Etats::DETECTION;
@@ -282,16 +282,15 @@ void Robot::minuterieAfficheur(uint8_t valeur)
 
 void Robot::afficheTrait()
 {
-    PORTC = 0b00000010;
-    //changer pour constantes trait
+    PORTC = AFFICHE_TRAIT;
 }
 
 void Robot::activerAfficheur()
 {
     initialiserDDRA(SORTIE);
     initialiserDDRC(SORTIE);
-    setAfficheur(1);
-    PORTA = 0b01111111;
+    setAfficheur(INIT_AFFICHEUR);
+    PORTA = AFFICHEUR5;
 }
 
 void Robot::changerAfficheur()
@@ -300,7 +299,7 @@ void Robot::changerAfficheur()
     PORTA++;
     if (PINA == 0xFF)
     {
-        PORTA = 0b11110111;
+        PORTA = AFFICHEUR1;
         //afficheur 1
     }
 }
@@ -310,43 +309,43 @@ void Robot::affiche(uint8_t chiffre)
     switch (chiffre)
     {
     case 0:
-        PORTC = 0b11111100;
+        PORTC = AFFICHE0;
         break;
 
     case 1:
-        PORTC = 0b01100000;
+        PORTC = AFFICHE1;
         break;
 
     case 2:
-        PORTC = 0b11011010;
+        PORTC = AFFICHE2;
         break;
 
     case 3:
-        PORTC = 0b11110010;
+        PORTC = AFFICHE3;
         break;
 
     case 4:
-        PORTC = 0b01100110;
+        PORTC = AFFICHE4;
         break;
 
     case 5:
-        PORTC = 0b10110110;
+        PORTC = AFFICHE5;
         break;
 
     case 6:
-        PORTC = 0b10111110;
+        PORTC = AFFICHE6;
         break;
 
     case 7:
-        PORTC = 0b11100000;
+        PORTC = AFFICHE7;
         break;
 
     case 8:
-        PORTC = 0b11111110;
+        PORTC = AFFICHE8;
         break;
 
     case 9:
-        PORTC = 0b11110110;
+        PORTC = AFFICHE9;
         break;
 
     default:

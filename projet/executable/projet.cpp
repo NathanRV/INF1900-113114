@@ -135,32 +135,32 @@ ISR(INT1_vect)
     float s3 = sonar.getDistance3();
 
     //Manoeuvre 1
-    if (s1 >= 3 && s2 >= 3 && (s3 >= 1 && s3 < 3))
+    if (s1 >= DISTANCE_OK && s2 >= DISTANCE_OK && (s3 >= DISTANCE_DNGR && s3 < DISTANCE_OK))
     {
         etatPresent = MANOEUVRE1;
     }
     //Manoeuvre 2
-    else if ((s1 >= 1 && s1 < 3) && s2 >= 3 && s3 >= 3)
+    else if ((s1 >= DISTANCE_DNGR && s1 < DISTANCE_OK) && s2 >= DISTANCE_OK && s3 >= DISTANCE_OK)
     {
         etatPresent = MANOEUVRE2;
     }
     //Manoeuvre 3
-    else if (s1 >= 3 && s2 < 1 && s3 < 1)
+    else if (s1 >= DISTANCE_OK && s2 < DISTANCE_DNGR && s3 < DISTANCE_DNGR)
     {
         etatPresent = MANOEUVRE3;
     }
     //Manoeuvre 4
-    else if (s1 < 1 && s2 < 1 && s3 >= 3)
+    else if (s1 < DISTANCE_DNGR && s2 < DISTANCE_DNGR && s3 >= DISTANCE_OK)
     {
         etatPresent = MANOEUVRE4;
     }
     //Manoeuvre 5
-    else if (s1 < 1 && s2 < 1 && s3 < 1)
+    else if (s1 < DISTANCE_DNGR && s2 < DISTANCE_DNGR && s3 < DISTANCE_DNGR)
     {
         etatPresent = MANOEUVRE5;
     }
     //Manoeuvre 6
-    else if ((s1 >= 1 && s1 < 3) && s2 >= 3 && (s3 >= 1 && s3 < 3))
+    else if ((s1 >= DISTANCE_DNGR && s1 < DISTANCE_OK) && s2 >= DISTANCE_OK && (s3 >= DISTANCE_DNGR && s3 < DISTANCE_OK))
     {
         etatPresent = MANOEUVRE6;
     }
