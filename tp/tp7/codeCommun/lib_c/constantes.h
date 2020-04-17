@@ -64,3 +64,37 @@
  #define RECULERGAUCHE     0b10
  #define AVANCERDROITE     0b00000100
  #define RECULERDROITE     0b10000000
+
+ /**
+ * Definition des constantes pour la classe Sonar
+ */
+#define LIMITE_COMPTEUR    58800
+#define FACTEUR_CONVERSION 5800
+#define PRECISION_NOMBRE   1
+#define LARGEUR_NOMBRE     3
+
+#define POSITION_SONAR1    0
+#define POSITION_SONAR2    6
+#define POSITION_SONAR3    12
+
+#define DISTANCE_DNGR      1
+#define DISTANCE_OK        3
+
+ /**
+ * Definition des constantes pour l'affichage 7 segments
+ */
+#define AFFICHE_TRAIT      0b00000010
+#define AFFICHE0           0b11111100
+#define AFFICHE1           0b01100000
+#define AFFICHE2           0b11011010
+#define AFFICHE3           0b11110010
+#define AFFICHE4           0b01100110
+#define AFFICHE5           0b10110110
+#define AFFICHE6           0b10111110
+#define AFFICHE7           0b11100000
+#define AFFICHE8           0b11111110
+#define AFFICHE9           0b11110110
+#define INIT_AFFICHEUR     1
+#define RESET              0
+#define AFFICHEUR1         0b11110111
+#define AFFICHEUR5         0b01111111
