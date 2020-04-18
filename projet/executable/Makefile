@@ -34,6 +34,9 @@ PRJSRC= $(wildcard *.cpp)
 # Inclusions additionnels (ex: -I/path/to/mydir)
 INC=-I ../../tp/tp7/codeCommun/lib_c
 
+# Librairies à compiler
+LIB_1 = ../../tp/tp7/codeCommun/lib_c
+
 # Libraires a lier (ex: -lmylib)
 LIBS=-L ../../tp/tp7/codeCommun/lib_c -l_c
 
@@ -124,11 +127,15 @@ OBJDEPS=$(CFILES:.c=.o) \
 # En plus de la commande make qui permet de compiler
 # votre projet, vous pouvez utilisez les commandes
 # make all, make install et make clean
-.PHONY: all install clean 
+.PHONY: all install clean $(LIB_1)
 
 # Make all permet simplement de compiler le projet
 #
-all: $(TRG) $(HEXROMTRG)
+all: $(LIB_1) $(TRG) $(HEXROMTRG)
+
+#Compilation de librairies
+$(LIB_1):
+	$(MAKE) -C $@
 
 # Implementation de la cible
 $(TRG): $(OBJDEPS)
@@ -165,6 +172,8 @@ install: $(HEXROMTRG)
 # lors de la compilation
 clean:
 	$(REMOVE) $(TRG) $(TRG).map $(OBJDEPS) $(HEXTRG) *.d
+	cd $(LIB_1) 
+	$(MAKE) clean -C $(LIB_1)
 
 # Pour plus d'information sur les phony target, consulter:
 # http://bit.ly/1WBQe61

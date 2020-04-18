@@ -1,7 +1,6 @@
 
-NE PAS OUBLIER : compiler la librairie lib_c avant de compiler ce projet. La librairie se trouve dans le répertoire 
-../tp/tp7/codeCommun/lib_c .
+Le Makefile a été modifié afin de compiler la librairie lib_c avant de compiler ce projet. La librairie se trouve dans le répertoire ../tp7/codeCommun/lib_c .
 
 
-Lorsque l'on lance la simulation la première fois : s'assurer de partir la tension dans le bouton-poussoir OU faire un reload du firmware immédiatement avant de commencer à utiliser le logiciel. Un problème quelconque force l'affichage à manoeuvre 5 si ce protocole n'est pas suivi.
+Lorsque l'on lance la simulation la première fois : s'assurer de partir la tension dans le bouton-poussoir OU faire un reload du firmware OU redémarrer la simulation avant de commencer à utiliser le logiciel. Un problème quelconque force l'affichage à manoeuvre 5 si ce protocole n'est pas suivi.
 
